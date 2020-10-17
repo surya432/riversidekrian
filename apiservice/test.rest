@@ -1,0 +1,16 @@
+
+POST http://apps-01.host-media.web.id:8091/vendor-api/kecamatan
+Content-Type: application/json
+
+{
+    "id":"240"
+}
+###
+GET http://localhost:8000/api/provinsi
+
+###
+GET http://localhost:8000/api/provinsi/15
+###
+GET http://localhost:8000/api/kabupaten/24
+###
+GET http://localhost:8000/api/kecamatan/281

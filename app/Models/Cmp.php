@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+class Cmp extends Model
+{
+    use HasFactory;
+
+    public function provinsi()
+    {
+        return $this->belongsTo('\App\Models\Provinsi');
+    }
+    public function kabupaten()
+    {
+        return $this->belongsTo('\App\Models\Kabupaten');
+    }
+
+    public function kecamatan()
+    {
+        return $this->belongsTo('\App\Models\Kecamatan');
+    }
+    public function kelurahan()
+    {
+        return $this->belongsTo('\App\Models\Kelurahan');
+    }
+    public function warga()
+    {
+        return $this->hasMany('\App\Models\User');
+    }
+}
