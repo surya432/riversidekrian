@@ -32,6 +32,7 @@ Route::get('/dashboard', function () {
 
 
 Route::prefix('/dashboard')->middleware('auth')->group(function () {
+    Route::get('', '\App\Http\Controllers\CmpController@show')->name('showcmpc');
     Route::resource('cmp', App\Http\Controllers\CmpController::class);
 });
 

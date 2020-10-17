@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cmp;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CmpController extends Controller
 {
+    public function redirectShow()
+    {
+        return redirect()->route('cmp.show', Auth::user()->cmp_id);
+    }
     public function json(Request $request)
     {
 
@@ -59,6 +67,7 @@ class CmpController extends Controller
     public function store(Request $request)
     {
         //
+        dd($request->all());
     }
 
     /**
@@ -86,6 +95,12 @@ class CmpController extends Controller
     public function edit(Cmp $cmp)
     {
         //
+        $provinsi = \App\Models\Provinsi::pluck('name', 'id');
+        $kabupaten = Kabupaten::where('provinsi_id', $cmp->provinsi_id)->pluck('name', 'id');
+        $kecamatan = Kecamatan::where('kabupaten_id', $cmp->kabupaten_id)->pluck('name', 'id');
+        $kelurahan = Kelurahan::where('kecamatan_id', $cmp->kecamatan_id)->pluck('name', 'id');
+
+        return view('cmp.edit', compact('cmp', 'kecamatan', 'kabupaten', 'kelurahan', 'provinsi'));
     }
 
     /**
@@ -98,6 +113,10 @@ class CmpController extends Controller
     public function update(Request $request, Cmp $cmp)
     {
         //
+
+        Cmp::find($cmp->id)->update($request->except('_method', '_token'));
+        return
+            redirect()->route('cmp.index');
     }
 
     /**

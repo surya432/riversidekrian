@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Cmp extends Model
 {
     use HasFactory;
+    protected $fillable = ['name', 'alamat', 'tipe', 'kecamatan_id', 'kabupaten_id', 'kelurahan_id', 'provinsi_id'];
 
     public function provinsi()
     {

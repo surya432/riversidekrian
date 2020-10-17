@@ -12,52 +12,48 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                {!! Form::open(['route' => 'cmp.create','class'=>'form-horizontal']) !!}
+                {!! Form::open(['route' => ['cmp.update', $cmp->id],'class'=>'form-horizontal','method' => 'put']) !!}
                 <h4>Info Lokasi Kegiatan</h4>
                 <div class="row">
 
                     {{Form::token()}}
                     <div class="form-group col-6">
                         {{ Form::label('name', null, ['class' => 'control-label']) }}
-                        {{ Form::text('name', null, array_merge(['class' => 'form-control'])) }}
+                        {{ Form::text('name', $cmp->name, array_merge(['class' => 'form-control'])) }}
                     </div>
                     <div class="form-group col-6 ">
                         {{ Form::label('Provinsi', null, ['class' => 'control-label']) }}
 
-                        <select name="province" id="province" style="width:100%!important" class="form-control select2-provinsi">
-                            <option value="">== Select Province ==</option>
-                            @foreach ($provinsi as $id => $name)
-                            <option value="{{ $id }}">{{ $name }}</option>
-                            @endforeach
-                        </select>
+                        {{ Form::select('provinsi_id', $provinsi, $cmp->provinsi_id, ['class'=>'form-control  select2-provinsi','style'=>'width:100%!important"']) }}
                     </div>
 
                     <div class="form-group col-6 ">
                         {{ Form::label('Kabupaten', null, ['class' => 'control-label']) }}
-                        <select name="kabupaten" id="kabupaten" style="width:100%!important" class="form-control select2 select2-hidden-accessible select2-kabupaten">
-                            <option value="">== Select Kabupaten ==</option>
-                        </select>
+                        {{ Form::select('kabupaten_id', $kabupaten, $cmp->kabupaten_id, ['class'=>'form-control  select2-kabupaten','style'=>'width:100%!important"']) }}
                     </div>
                     <div class="form-group col-6 ">
                         {{ Form::label('Kecamatan', null, ['class' => 'control-label']) }}
-                        <select name="kecamatan" id="kecamatan" style="width:100%!important" class="form-control  select2-kecamatan">
-                            <option value="">== Select Kecamatan ==</option>
-                        </select>
+                        {{ Form::select('kecamatan_id', $kecamatan, $cmp->kecamatan_id, ['class'=>'form-control  select2-kecamatan','style'=>'width:100%!important"']) }}
+
                     </div>
 
                     <div class="form-group col-6 ">
                         {{ Form::label('Kelurahan', null, ['class' => 'control-label']) }}
-                        <select name="kelurahan" id="kelurahan" style="width:100%!important" class="form-control select2-kelurahan">
-                            <option value="">== Select Kelurahan ==</option>
-                        </select>
+                        {{ Form::select('kelurahan_id', $kelurahan, $cmp->kelurahan_id, ['class'=>'form-control  select2-kelurahan','style'=>'width:100%!important"']) }}
+                    </div>
+                    <div class="form-group col-6 ">
+                        {{ Form::label('tipe', null, ['class' => 'control-label']) }}
+                        <?php $dataTipe = array('Desa' => 'Desa', 'Perumahan' => 'Perumahan'); ?>
+                        {{ Form::select('tipe', $dataTipe, $cmp->tipe, ['class'=>'form-control ','style'=>'width:100%!important"']) }}
+
                     </div>
                     <div class="form-group col-6 ">
                         {{ Form::label('alamat', null, ['class' => 'control-label']) }}
-                        {{ Form::text('alamat', null, array_merge(['class' => 'form-control'])) }}
+                        {{ Form::text('alamat', $cmp->alamat, array_merge(['class' => 'form-control'])) }}
                     </div>
 
                 </div>
-                <h4>Warga Yang Di Daftarkan</h4>
+                {{Form::submit()}}
                 {!! Form::close() !!}
             </div>
         </div>

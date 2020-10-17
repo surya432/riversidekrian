@@ -12,7 +12,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                {!! Form::open(['route' => 'cmp.create','class'=>'form-horizontal']) !!}
+                {!! Form::open(['route' => 'cmp.store','class'=>'form-horizontal']) !!}
                 <h4>Info Lokasi Kegiatan</h4>
                 <div class="row">
 
@@ -65,6 +65,8 @@
 
                 </div>
                 <h4>Warga Yang Di Daftarkan</h4>
+                {{Form::submit()}}
+
                 {!! Form::close() !!}
             </div>
         </div>

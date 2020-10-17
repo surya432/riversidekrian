@@ -16,7 +16,7 @@
                         <div class="box box-widget widget-user">
                             <!-- Add the bg color to the header using any of the bg-* classes -->
                             <div class="widget-user-header" style="height: 300px;">
-                                <h3 class="widget-user-username">{{$data->name}}</h3>
+                                <h3 class="widget-user-username">{{$data->tipe}} {{$data->name}}</h3>
                                 <h5 class="widget-user-desc">{{ $data->kelurahan->name}}, {{ $data->kabupaten->name}} - {{$data->provinsi->name}}</h5>
                             </div>
                             <!-- <div class="widget-user-image" style="padding-top:80px;">
@@ -54,8 +54,11 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="row" style="margin-top:20px">
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
                     <div class="col-md-12 col-sm-12">
                         <div class="box box-danger">
                             <div class="box-header with-border">
