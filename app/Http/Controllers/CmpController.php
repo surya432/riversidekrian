@@ -17,9 +17,9 @@ class CmpController extends Controller
                 return view('links', [
                     //Kemudian dioper ke file links.blade.php
                     'model' => $q,
-                    'url_edit' => route('cmp.edit', $q->id),
+                    'link_edit' => route('cmp.edit', $q->id),
                     'url_hapus' => route('cmp.destroy', $q->id),
-                    'url_link' => route('cmp.show', $q->id),
+                    'link_show' => route('cmp.show', $q->id),
                     // 'url_detail' => route('permission.show', $q->id),
                 ]);
             })
@@ -46,6 +46,8 @@ class CmpController extends Controller
     public function create()
     {
         //
+        $provinsi = \App\Models\Provinsi::pluck('name', 'id');
+        return view('cmp.create', compact('provinsi'));
     }
 
     /**
@@ -67,8 +69,11 @@ class CmpController extends Controller
      */
     public function show(Cmp $cmp)
     {
-        $data = $cmp::with('provinsi', 'kabupaten', 'kecamatan', 'kelurahan', 'warga')->first();
-
+        $data = $cmp::with(['provinsi', 'kabupaten', 'kecamatan', 'kelurahan', 'warga', 'rumah' => function ($q) {
+            $q
+                ->join('rumahs', 'rumahs.id', '=', 'homeusers.rumah_id')
+                ->select('rumahs.*');
+        }])->first();
         return view('cmp.show', compact('data'));
     }
 

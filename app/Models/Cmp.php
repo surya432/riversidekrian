@@ -31,4 +31,8 @@ class Cmp extends Model
     {
         return $this->hasMany('\App\Models\User');
     }
+    public function rumah()
+    {
+        return $this->hasMany('App\Models\Homeuser');
+    }
 }

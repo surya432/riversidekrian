@@ -15,9 +15,9 @@
 
                 <div class="dataTables_wrapper dt-bootstrap4">
                     <div class="box-body">
-                        <button type="button" style="margin-bottom:20px" link="{{ route('cmp.create') }}" class="btn btn-primary btn-create btn-action btn-sm btn-flat " data-toggle="modal" data-target="#modelId">
+                        <a style="margin-bottom:20px" href="{{ route('cmp.create') }}" class="btn btn-primary btn-sm btn-flat">
                             Add CMP
-                        </button>
+                        </a>
                         <table class="table table-striped table-bordered dataTable" style="width: 100%!important;" id="table">
                             <thead>
                                 <tr>

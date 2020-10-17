@@ -119,10 +119,6 @@
         });
     </script>
     <script>
-        $(document).ajaxStart(function() {
-            Pace.restart();
-        });
-
         function swal2(types, titles) {
             Swal.fire({
                 position: 'bottom-end',
@@ -131,6 +127,87 @@
                 showConfirmButton: false,
                 timer: 2000
             })
+        }
+        $('body').on('click', '.btn-action', function(elemen) {
+            elemen.preventDefault();
+            $(".btn-action").attr("disabled", true);
+            if ($(this).hasClass('btn-create')) {
+                showModal($(this));
+            } else if ($(this).hasClass('btn-get')) {
+                showHtml($(this));
+            } else if ($(this).hasClass('btn-detail')) {
+                showModal($(this));
+            } else if ($(this).hasClass('btn-edit')) {
+                showModal($(this));
+            } else if ($(this).hasClass('delete')) {
+                const urlsdelete = $(this).attr('link');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to delete this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                        axios({
+                            url: urlsdelete,
+                            credentials: true,
+                            method: "DELETE",
+                        }).then(response => {
+                            console.log(response);
+                            table.draw();
+                            swal2(data.status, data.message);
+                        }).catch(error => {
+                            console.log(error.response);
+                        });
+                    }
+                })
+            }
+            $(".btn-action").attr("disabled", false);
+        });
+        $(document).ajaxStart(function() {
+            Pace.restart();
+        });
+
+        function showHtml(el) {
+            var urls = el.attr('link'),
+                title = el.attr('title'),
+                attrPost = el.attr('idPost');
+            axios({
+                url: urls,
+                credentials: true,
+                method: "GET",
+            }).then(response => {
+                $('#settings').html(response.data);
+            }).catch(error => {
+                console.log(error.response);
+            });
+        }
+
+        function showModal(el) {
+            var urls = el.attr('link'),
+                title = el.attr('title'),
+                attrPost = el.attr('idPost');
+            axios({
+                url: urls,
+                credentials: true,
+                method: "GET",
+            }).then(response => {
+                $('.modal-content').html(response.data);
+                $('#saveBtn').text(el.hasClass('edit') ? 'Edit' : 'Simpan');
+                $('.modal-title').text(title);
+                if (el.hasClass('btn-addlink')) {
+                    $('#invisible_id').val('1');
+                }
+                if (el.hasClass('btn-postId')) {
+                    $('.PostId').val(attrPost);
+                }
+                $('.modal').modal('show');
+            }).catch(error => {
+                console.log(error.response);
+            });
         }
     </script>
 

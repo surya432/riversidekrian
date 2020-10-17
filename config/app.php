@@ -233,6 +233,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
+        'Avatar'    => Laravolt\Avatar\Facade::class,
 
     ],
 
