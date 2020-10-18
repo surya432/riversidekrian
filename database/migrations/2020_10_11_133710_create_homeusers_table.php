@@ -21,7 +21,7 @@ class CreateHomeusersTable extends Migration
             $table->foreignId('rumah_id')
                 ->constrained()
                 ->onDelete('cascade');
-            $table->string('cmp_id');
+            $table->integer('cmp_id');
             $table->timestamps();
             $table->softDeletes();
         });

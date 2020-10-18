@@ -4,12 +4,18 @@ namespace Database\Seeders;
 
 use App\Models\Cmp;
 use App\Models\Homeuser;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
+use App\Models\Provinsi;
 use App\Models\Rumah;
 use App\Models\Typerumah;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -26,8 +32,10 @@ class AccountSeed extends Seeder
             // Call the php artisan migrate:refresh
             $batch = DB::table('migrations')->orderBy('batch', "desc")->first();
             $this->command->warn("Data cleared, starting from blank database. stepto " . $batch->batch);
-            // $this->command->call("migrate:rollback");
-            // $this->command->call('migrate');
+            $this->command->call("migrate:fresh");
+            $this->command->call('migrate');
+
+            // DB::unprepared(File::get(base_path('database\seeders\billingrt.sql')));
 
             $this->command->warn("Data cleared, starting from blank database. stepto ");
 
@@ -37,36 +45,34 @@ class AccountSeed extends Seeder
             Permission::create(['name' => 'edit']);
             Permission::create(['name' => 'delete']);
             Permission::create(['name' => 'publish']);
+            Permission::create(['name' => 'show']);
             Permission::create(['name' => 'setting']);
-            Permission::create(['name' => 'superadmin']);
-
             // create roles and assign created permissions
 
             // this can be done as separate statements
-            $role = Role::create(['name' => 'writer']);
-            $role->givePermissionTo('edit');
+            $role = Role::create(['name' => 'warga']);
+            $role->givePermissionTo('show');
+            $role = Role::create(['name' => 'bendahara']);
+            $role->givePermissionTo('show', 'edit', 'publish');
 
-            // or may be done by chaining
-            $role = Role::create(['name' => 'admin'])
-                ->givePermissionTo(['setting', 'publish']);
-            $role = Role::create(['name' => 'superadmin'])
-                ->givePermissionTo(['setting', 'publish']);
-
+            Role::create(['name' => 'kepala-rt'])
+                ->givePermissionTo(['edit', 'delete', 'publish', 'show']);
             $Cmp = Cmp::create([
                 "name" => "Super-Admin",
-                "alamat" => "Kesimbukan RT/RW 02/01",
+                "alamat" => "Kesimbukan",
                 "provinsi_id" => 15,
                 "kabupaten_id" => 240,
                 "kecamatan_id" => 3527,
                 "kelurahan_id" => 43688,
                 "tipe" => "Desa",
+                "rt" => "01",
+                "rw" => "02",
+                "tipe" => "Desa",
                 "create_by" => "surya",
             ]);
-
             Typerumah::create(['name' => "Penghuni Kontrak"]);
             $typeRumah = Typerumah::create(['name' => "Penghuni Tetap"]);
-            $role = Role::create(['name' => 'super-admin']);
-            $role->givePermissionTo(Permission::all());
+            $role = Role::create(['name' => 'super-admin'])->givePermissionTo(Permission::all());
             $user = User::create([
                 'name' => "Surya Hadi P",
                 'email' => "hadisurya295@gmail.com",
@@ -81,19 +87,37 @@ class AccountSeed extends Seeder
                 "kelurahan_id" => 43688,
                 'cmp_id' => $Cmp->id,
             ]);
-            $rumah = Rumah::create([
-                "no_rumah" => "78",
-                "blok_rumah" => "selatan jalan",
-                "status" => 'Berpenghuni',
+
+            // Homeuser::create(['user_id' => $user->id, 'cmp_id' => $Cmp->id, 'rumah_id' => $rumah->id]);
+            $user->syncRoles(['super-admin']);
+            $user2 = User::create([
+                'name' => "Surya Hadi P2",
+                'email' => "hadisurya107@gmail.com",
+                'tlpn' => "085748990057",
+                'password' => Hash::make("12345678"),
+                "alamat" => "Kesimbukan 02/01",
+                "rt" => "02",
+                "rw" => "01",
                 "provinsi_id" => 15,
                 "kabupaten_id" => 240,
                 "kecamatan_id" => 3527,
                 "kelurahan_id" => 43688,
+                'cmp_id' => $Cmp->id,
+            ]);
+            $user2->syncRoles(['kepala-rt']);
+            $rumah = Rumah::create([
+                "no_rumah" => "78",
+                "blok_rumah" => "selatan jalan",
+                "status" => 'Berpenghuni',
+                // "provinsi_id" => 15,
+                // "kabupaten_id" => 240,
+                // "kecamatan_id" => 3527,
+                // "kelurahan_id" => 43688,
                 "typerumah_id" => $typeRumah->id,
                 'cmp_id' => $Cmp->id,
             ]);
-            Homeuser::create(['user_id' => $user->id, 'cmp_id' => $Cmp->id, 'rumah_id' => $rumah->id]);
-            $user->syncRoles(['super-admin']);
+            Homeuser::create(['user_id' => $user2->id, 'cmp_id' => $Cmp->id, 'rumah_id' => $rumah->id]);
+
             $this->command->call('setting:freshall');
         } else {
             $this->command->warn("Cancel Action");

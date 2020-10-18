@@ -16,12 +16,13 @@
                         <div class="box box-widget widget-user">
                             <!-- Add the bg color to the header using any of the bg-* classes -->
                             <div class="widget-user-header" style="height: 300px;">
-                                <h3 class="widget-user-username">{{$data->tipe}} {{$data->name}}</h3>
-                                <h5 class="widget-user-desc">{{ $data->kelurahan->name}}, {{ $data->kabupaten->name}} - {{$data->provinsi->name}}</h5>
+                                <h3 class="widget-user-username">{{$data->tipe}} {{ $data->kelurahan->name}} RT {{ $data->rt}} </h3>
+                                <h5 class="widget-user-desc">Kecamatan {{ $data->kecamatan->name}} - {{ $data->kabupaten->name}}</h5>
+                                <h5 class="widget-user-desc"> {{$data->provinsi->name}}</h5>
                             </div>
                             <!-- <div class="widget-user-image" style="padding-top:80px;">
-                        <img class="img-circle" src="{{ Avatar::create($data->name)->toBase64()}}" alt="User Avatar">
-                    </div> -->
+                                    <img class="img-circle" src="{{ Avatar::create($data->name)->toBase64()}}" alt="User Avatar">
+                            </div> -->
                             <div class="box-footer">
                                 <div class="row">
                                     <!-- <div class="col-sm-4 border-right">

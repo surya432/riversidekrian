@@ -252,6 +252,12 @@ return [
         //     'label_color' => 'success',
         // ],
         [
+            'text' => 'CMP',
+            'route'  => 'cmp.index',
+            'icon' => 'fas fa-fw fa-users',
+            'can'   => 'isAdmin'
+        ],
+        [
             'header' => 'account_settings',
         ],
         [
@@ -265,45 +271,45 @@ return [
             'icon' => 'fas fa-fw fa-lock',
         ],
 
-        [
-            'text'    => 'Setting',
-            'icon'    => 'fas fa-fw fa-cog',
-            'can'        => 'setting',
-            'submenu' => [
-                [
-                    'text' => 'CMP',
-                    'route'  => 'cmp.index',
-                ],
-                [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-            ],
-        ],
+        // [
+        //     'text'    => 'Setting',
+        //     'icon'    => 'fas fa-fw fa-cog',
+        //     'can'        => 'setting',
+        //     'submenu' => [
+        //         [
+        //             'text' => 'CMP',
+        //             'route'  => 'cmp.index',
+        //         ],
+        //         [
+        //             'text'    => 'level_one',
+        //             'url'     => '#',
+        //             'submenu' => [
+        //                 [
+        //                     'text' => 'level_two',
+        //                     'url'  => '#',
+        //                 ],
+        //                 [
+        //                     'text'    => 'level_two',
+        //                     'url'     => '#',
+        //                     'submenu' => [
+        //                         [
+        //                             'text' => 'level_three',
+        //                             'url'  => '#',
+        //                         ],
+        //                         [
+        //                             'text' => 'level_three',
+        //                             'url'  => '#',
+        //                         ],
+        //                     ],
+        //                 ],
+        //             ],
+        //         ],
+        //         [
+        //             'text' => 'level_one',
+        //             'url'  => '#',
+        //         ],
+        //     ],
+        // ],
 
 
     ],

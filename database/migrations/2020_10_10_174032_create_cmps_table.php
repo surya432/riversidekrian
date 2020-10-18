@@ -17,14 +17,16 @@ class CreateCmpsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('alamat');
-            $table->string('provinsi_id');
-            $table->string('kabupaten_id');
-            $table->string('kecamatan_id');
-            $table->string('kelurahan_id');
+            $table->integer('provinsi_id');
+            $table->integer('kabupaten_id');
+            $table->integer('kecamatan_id');
+            $table->integer('kelurahan_id');
+            $table->string('rt', 4);
+            $table->string('rw', 4);
             $table->enum('tipe', ['Perumahan', 'Desa']);
+            $table->string('foto')->nullable();
             $table->string('create_by');
             $table->string('update_by')->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });

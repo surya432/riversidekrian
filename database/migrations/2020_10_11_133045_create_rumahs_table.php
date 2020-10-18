@@ -15,14 +15,16 @@ class CreateRumahsTable extends Migration
     {
         Schema::create('rumahs', function (Blueprint $table) {
             $table->id();
-            $table->string('no_rumah');
-            $table->string('blok_rumah');
+            $table->string('no_rumah')->nullable();
+            $table->string('blok_rumah')->nullable();
             $table->enum('status', ['Berpenghuni', 'Kosong']);
-            $table->string('provinsi_id');
-            $table->string('kabupaten_id');
-            $table->string('kecamatan_id');
-            $table->string('kelurahan_id');
-            $table->string('cmp_id');
+            // $table->integer('provinsi_id');
+            // $table->integer('kabupaten_id');
+            // $table->integer('kecamatan_id');
+            // $table->integer('kelurahan_id');
+            // $table->string('rt', 4);
+            // $table->string('rw', 4);
+            $table->integer('cmp_id');
             $table->foreignId('typerumah_id')
                 ->constrained()
                 ->onDelete('cascade');
