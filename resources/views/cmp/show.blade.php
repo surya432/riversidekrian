@@ -23,6 +23,7 @@
                             <!-- <div class="widget-user-image" style="padding-top:80px;">
                                     <img class="img-circle" src="{{ Avatar::create($data->name)->toBase64()}}" alt="User Avatar">
                             </div> -->
+
                             <div class="box-footer">
                                 <div class="row">
                                     <!-- <div class="col-sm-4 border-right">
@@ -57,6 +58,7 @@
                 </div>
             </div>
         </div>
+
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -72,16 +74,16 @@
                                     <li>
                                         <img src="{{Gravatar::get($person->email)}}" alt="User Image">
                                         <a class="users-list-name" href="#">{{$person->name}}</a>
-                                        <span class="users-list-date">{{$person->email}}</span>
+                                        <span class="users-list-date">{{$person->roles[0]->name}}</span>
                                     </li>
                                     @endforeach
                                 </ul>
                                 <!-- /.users-list -->
                             </div>
                             <!-- /.box-body -->
-                            <!-- <div class="box-footer text-center">
-                        <a href="javascript:void(0)" class="uppercase">View All Users</a>
-                    </div> -->
+                            <div class="box-footer text-center">
+                                <a href="javascript:void(0)" class="uppercase">View All Users</a>
+                            </div>
                             <!-- /.box-footer -->
                         </div>
                     </div>

@@ -258,6 +258,18 @@ return [
             'can'   => 'isAdmin'
         ],
         [
+            'text' => 'Keuangan',
+            'route'  => 'cmp.index',
+            'icon' => 'fas fa-fw fa-users',
+            'can'   => ['isRT', 'isBendahara'],
+        ],
+        [
+            'text' => 'Laporan',
+            'url'  => 'dashboard',
+            'icon' => 'fas fa-fw fa-users',
+            'can'   => ['isRT', 'isBendahara', 'isWarga']
+        ],
+        [
             'header' => 'account_settings',
         ],
         [

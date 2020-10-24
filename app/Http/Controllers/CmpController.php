@@ -6,6 +6,7 @@ use App\Models\Cmp;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,9 +14,9 @@ class CmpController extends Controller
 {
     public function redirectShow()
     {
-        if (Auth::user()->hasRole('super-admin')) {
-            return view('home');
-        }
+        // if (User::find(Auth::user()->id)->first()->hasRole('super-admin')) {
+        //     return view('home');
+        // }
         $data = Cmp::find(Auth::user()->cmp_id)->with(['provinsi', 'kabupaten', 'kecamatan', 'kelurahan', 'warga', 'rumah' => function ($q) {
             $q
                 ->join('rumahs', 'rumahs.id', '=', 'homeusers.rumah_id')

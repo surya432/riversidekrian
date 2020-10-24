@@ -30,7 +30,7 @@ class Cmp extends Model
     }
     public function warga()
     {
-        return $this->hasMany('\App\Models\User');
+        return $this->hasMany('\App\Models\User')->with('roles');
     }
     public function rumah()
     {

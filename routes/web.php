@@ -34,6 +34,7 @@ Route::get('/dashboard', function () {
 Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::get('', '\App\Http\Controllers\CmpController@redirectShow')->name('showcmpc');
     Route::resource('cmp', App\Http\Controllers\CmpController::class);
+    Route::resource('laporan', App\Http\Controllers\CmpController::class);
 });
 
 Route::prefix('/dt')->middleware('auth')->group(function () {
