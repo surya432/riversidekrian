@@ -19,6 +19,7 @@ class User extends Authenticatable
      *
      * @var array
      */
+    use \Illuminate\Database\Eloquent\SoftDeletes;
     protected $fillable = [
         'name',
         'email',

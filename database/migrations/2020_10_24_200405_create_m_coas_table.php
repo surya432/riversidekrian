@@ -23,6 +23,7 @@ class CreateMCoasTable extends Migration
             $table->enum('status', ['active', 'pasif'])->default('active');
             $table->integer('cmp_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

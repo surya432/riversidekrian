@@ -10,7 +10,7 @@ class Cmp extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'alamat', 'tipe', 'kecamatan_id', 'kabupaten_id', 'kelurahan_id', 'provinsi_id'];
-
+    use \Illuminate\Database\Eloquent\SoftDeletes;
     public function provinsi()
     {
         return $this->belongsTo('\App\Models\Provinsi');
@@ -30,7 +30,7 @@ class Cmp extends Model
     }
     public function warga()
     {
-        return $this->hasMany('\App\Models\User')->with('roles')->limit(8);
+        return $this->hasMany('\App\Models\User')->with('roles')->limit(10);
     }
     public function rumah()
     {

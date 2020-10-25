@@ -10,4 +10,5 @@ class Kabupaten extends Model
     use HasFactory;
     protected $fillable = ['name', 'provinsi_id'];
     protected $hidden = ['deleted_at'];
+    use \Illuminate\Database\Eloquent\SoftDeletes;
 }

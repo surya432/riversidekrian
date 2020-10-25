@@ -7,6 +7,7 @@ use App\Models\MPackages;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MPackagesController extends Controller
 {
@@ -43,6 +44,17 @@ class MPackagesController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            DB::beginTransaction();
+            DB::table('users')->create($request->except('_token', '_method', 'warga'));
+
+            DB::table('posts')->delete();
+            DB::commit();
+            return redirect()->route('coa.index')->with('message', 'Berhasil Disimpan');;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(array('status' => false, "message" => "Tagihan Gagal Di buat"), 500);
+        }
     }
 
     /**

@@ -15,7 +15,7 @@
                 @include('displayerror')
                 <div class="col-md-12">
                     <div class="box box-info">
-                        {!! Form::open(['route' => 'cmp.store','class'=>'form-horizontal','autocomplete'=>"off"]) !!}
+                        {!! Form::open(['route' => 'cmp.store','class'=>'form-horizontal','id'=>"myForm",'autocomplete'=>"off"]) !!}
                         <div class="box-header with-border">
                             <h3 class="box-title">Buat Tagihan Baru</h3>
                         </div>
@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="form-group col-6">
                                     <label for="">Total Tagihan</label>
-                                    <input type="text" class="form-control input-sm" name="duedate" value="60.000" readonly>
+                                    <input type="text" class="form-control input-sm totalTagihan" name="totalTagihan" value="" readonly>
                                     <!-- /.input group -->
                                 </div>
                                 <div class="col-6">
@@ -71,7 +71,7 @@
 
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="text-left"> <button class='btn btn-sm btn-primary btn-flat '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Tagihan</button>
+                                    <div class="text-left"> <button data-toggle="modal" data-target="#modal" class='btn btn-sm btn-primary btn-flat btn-add-tagihan '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Tagihan</button>
                                     </div>
                                     <table class="table table-striped table-bordered dataTable">
                                         <thead>
@@ -82,31 +82,9 @@
                                                 <th style="width:6%!important">Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Biaya Iuran Sampah</td>
-                                                <td>Rp.20.000</td>
-                                                <td class="nosort">
-                                                    <div class="text-left"> <button class='btn btn-sm btn-danger btn-flat '><i class="fas fa-fw  fa-trash" aria-hidden="true"></i></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Biaya Iuran Rutin</td>
-                                                <td>Rp.30.000</td>
-                                                <td class="nosort">
-                                                    <div class="text-left"> <button class='btn btn-sm btn-danger btn-flat '><i class="fas fa-fw  fa-trash" aria-hidden="true"></i></button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Biaya Iuran Sosial</td>
-                                                <td>Rp.10.000</td>
-                                                <td class="nosort">
-                                                    <div class="text-left"> <button class='btn btn-sm btn-danger btn-flat '><i class="fas fa-fw  fa-trash" aria-hidden="true"></i></button>
-                                                </td>
-                                            </tr>
+                                        <tbody id='tbody'>
+
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -117,7 +95,7 @@
                         <div class="box-footer">
                             <a href="{{route('tagihan.index')}}" class="btn btn-info">Kembali</a>
                             <button type="reset" class="btn btn-danger">Batal</button>
-                            <button type="submit" class="btn btn-success">Simpan</button>
+                            <button type="submit" id="simpan" class="btn btn-success simpan">Simpan</button>
                         </div>
                         {!! Form::close() !!}
                     </div>
@@ -125,6 +103,39 @@
             </div>
         </div>
     </div>
+</div>
+<div class="modal" id="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Tagihan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Warga Pelangan <span class="required">*</span></label>
+                    <select class="form-control select2 tagihan" name='tagihan' style="width: 100%;">
+                        <option value="">== Pilih Pembayaran ==</option>
+                        @foreach ($dataAccount as $id => $name)
+                        <option value="{{ $name->code }}">{{ $name->desc }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nominal Tagihan <span class="required">*</span></label>
+                    <input type="text" class="form-control input-sm nominal" name="nominal" placeholder="Nominal Tagihan..." maxlength="30" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="acc-code" required>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="saveBtn" value="create" class="btn btn-primary saveBtn">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 @stop
 @section('js')
@@ -135,57 +146,87 @@
             autoclose: true,
             format: 'yyyy-mm-dd'
         })
+        $('.btn-add-tagihan').click((e) => {
+            e.preventDefault();
+        });
+        var dataTagihan = [];
         var count = 1;
-        $('#add').click(function() {
-            count = count + 1;
-            var html_code = "<tr id='row" + count + "'>";
-            html_code += "<td contenteditable='true' class='item_name'></td>";
-            html_code += "<td contenteditable='true' class='item_code'></td>";
-            html_code += "<td contenteditable='true' class='item_desc'></td>";
-            html_code += "<td contenteditable='true' class='item_price' ></td>";
-            html_code += "<td><button type='button' name='remove' data-row='row" + count + "' class='btn btn-danger btn-xs remove'>-</button></td>";
-            html_code += "</tr>";
-            $('#crud_table').append(html_code);
+
+        function rebuildTagihan() {
+            var html_code = "";
+            var totalTagihan = 0;
+            dataTagihan.forEach((d, i) => {
+                count = i + 1;
+                html_code += "<tr id='" + dataTagihan[i].id + "'>";
+                html_code += "<td>" + count + "</td>";
+                html_code += "<td>" + dataTagihan[i].name + "</td>";
+                html_code += "<td>Rp. " + dataTagihan[i].nominal + "</td>";;
+                html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
+                html_code += "</tr>";
+                totalTagihan = Number(totalTagihan) + Number(dataTagihan[i].nominal);
+            });
+            $('#tbody').html(html_code);
+            $('.totalTagihan').val(totalTagihan);
+
+        }
+        $('.saveBtn').click((e) => {
+            e.preventDefault();
+            if ($('.tagihan').val() == "") {
+                return;
+            }
+            if ($('.nominal').val() == "") {
+                return;
+            }
+            var obj = {
+                "name": $('.tagihan :selected').text(),
+                "id": $('.tagihan').val(),
+                "nominal": $('.nominal').val()
+            };
+            $('.nominal').val("");
+            $(".tagihan").val('').trigger('change')
+
+            dataTagihan.push(obj);
+            console.log(dataTagihan);
+            rebuildTagihan();
+            $('#modal').modal('hide');
+
         });
 
-        $(document).on('click', '.remove', function() {
-            var delete_row = $(this).data("row");
-            $('#' + delete_row).remove();
+
+        $(document).on('click', '.remove', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data-row');
+            console.log(id);
+            dataTagihan = dataTagihan.filter(function(d, i) {
+                console.log(i + " " + id);
+                return id !== d.id
+            })
+            console.log(dataTagihan)
+            rebuildTagihan();
+
+
         });
 
-        $('#save').click(function() {
-            var item_name = [];
-            var item_code = [];
-            var item_desc = [];
-            var item_price = [];
-            $('.item_name').each(function() {
-                item_name.push($(this).text());
+        $('#simpan').click(function(e) {
+            e.preventDefault()
+            var datas = $('#myForm').serializeArray();
+            datas.push({
+                name: 'detail',
+                value: dataTagihan
             });
-            $('.item_code').each(function() {
-                item_code.push($(this).text());
-            });
-            $('.item_desc').each(function() {
-                item_desc.push($(this).text());
-            });
-            $('.item_price').each(function() {
-                item_price.push($(this).text());
-            });
+            console.log(datas);
             $.ajax({
-                url: "insert.php",
+                url: "{{route('tagihan.store')}}",
                 method: "POST",
-                data: {
-                    item_name: item_name,
-                    item_code: item_code,
-                    item_desc: item_desc,
-                    item_price: item_price
-                },
+                data: datas,
+                contentType: "application/json",
+
                 success: function(data) {
-                    alert(data);
-                    $("td[contentEditable='true']").text("");
-                    for (var i = 2; i <= count; i++) {
-                        $('tr#' + i + '').remove();
-                    }
-                    fetch_item_data();
+                    window.location = "{{route('tagihan.index')}}";
+                },
+                error: function(xhr, status, error) {
+                    var err = JSON.parse(xhr.responseText);
+                    swal2('error', err.Message);
                 }
             });
         });

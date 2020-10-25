@@ -117,9 +117,11 @@
             'X-Requested-With': 'XMLHttpRequest',
             'Authorization': "Bearer {{ session('token') }}"
         }
+    </script>
+    <script type="text/javascript">
         $.ajaxSetup({
             headers: {
-                'Authorization': "Bearer {{ session('token') }}",
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
     </script>

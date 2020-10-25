@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Kelurahan extends Model
 {
     use HasFactory;
+    use \Illuminate\Database\Eloquent\SoftDeletes;
     protected $hidden = ['deleted_at'];
-
 }

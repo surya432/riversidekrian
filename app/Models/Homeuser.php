@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Homeuser extends Model
 {
     use HasFactory;
+    use \Illuminate\Database\Eloquent\SoftDeletes;
 }

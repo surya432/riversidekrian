@@ -77,7 +77,7 @@ class MCoaController extends Controller
             dd($e);
         }
 
-        return redirect()->route('coa.index');
+        return redirect()->route('coa.index')->with('message', 'Berhasil Disimpan');;
     }
 
     /**
@@ -118,10 +118,10 @@ class MCoaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MCoaModel $mCoa)
+    public function update(Request $request, $id)
     {
         // dd($request->all());
-        MCoaModel::where('id', $mCoa->id)->update($request->except('_token', '_method', 'code'));
+        MCoaModel::where('id', $id)->update($request->except('_token', '_method', 'code'));
 
         return redirect()->route('coa.index');
     }

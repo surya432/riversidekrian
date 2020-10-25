@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class MCoa extends Model
 {
     use HasFactory;
+    use \Illuminate\Database\Eloquent\SoftDeletes;
     protected $guarded = ['id'];
 }
