@@ -15,9 +15,6 @@ class CreateMUserPackagesTable extends Migration
     {
         Schema::create('m_user_packages', function (Blueprint $table) {
             $table->id();
-            $table->string('coa_id')->nullable();
-            $table->string('name');
-            $table->string('nominal');
             $table->foreignId('m_packages_id')
                 ->constrained()
                 ->onDelete('cascade');

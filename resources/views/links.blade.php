@@ -18,5 +18,13 @@
     <button link="{{ $url_hapus }}" class='btn btn-sm btn-danger btn-sm btn-action delete btn-flat '><i class="fas fa-fw  fa-trash" aria-hidden="true"></i></button>
 
     @endif
+    @if(!empty($link_hapus))
+    <form action="{{ $link_hapus}}" method="post">
+        @method('DELETE')
+        @csrf
+        <button class='btn btn-sm btn-danger btn-flat '><i class="fas fa-fw  fa-trash" aria-hidden="true"></i></button>
+    </form>
+    @endif
+
     {{-- <button class  = 'btn btn-sm btn-danger btn-sm btn-action'><i class  = 'fa fa-close'></i></button> --}}
 </div>

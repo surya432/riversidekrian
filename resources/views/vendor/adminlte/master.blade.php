@@ -70,7 +70,11 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('favicon/ms-icon-144x144.png') }}">
     @endif
-
+    <style>
+        .required {
+            color: red;
+        }
+    </style>
 </head>
 
 <body class="@yield('classes_body')" @yield('body_data')>
@@ -88,6 +92,7 @@
 
     {{-- Configured Scripts --}}
     @include('adminlte::plugins', ['type' => 'js'])
+
 
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     @else

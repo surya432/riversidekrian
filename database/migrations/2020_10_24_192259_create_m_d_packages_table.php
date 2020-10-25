@@ -15,6 +15,10 @@ class CreateMDPackagesTable extends Migration
     {
         Schema::create('m_d_packages', function (Blueprint $table) {
             $table->id();
+            $table->string('m_coas_id');
+            $table->string('name');
+            $table->string('desc')->nullable();
+            $table->string('nominal');
             $table->foreignId('m_packages_id')
                 ->constrained()
                 ->onDelete('cascade');

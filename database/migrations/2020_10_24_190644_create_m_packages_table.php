@@ -17,8 +17,10 @@ class CreateMPackagesTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->enum('tipe', ['Bulanan', 'Sekali']);
+            $table->enum('status', ['Aktif', 'Tidak Aktif']);
+            $table->enum('proses-status', ['in-proses', 'closed', 'post','pending']);
             $table->date('date');
-            $table->date('due_date');
+            $table->date('duedate');
             $table->string('create_by');
             $table->string('update_by')->nullable();
             $table->integer('cmp_id');

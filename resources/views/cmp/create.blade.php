@@ -64,7 +64,7 @@
                     </div>
 
                 </div>
-                <h4>Warga Yang Di Daftarkan</h4>
+                <!-- <h4>Warga Yang Di Daftarkan</h4> -->
                 {{Form::submit()}}
 
                 {!! Form::close() !!}

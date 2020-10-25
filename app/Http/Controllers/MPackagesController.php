@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MCoa;
 use App\Models\MPackages;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MPackagesController extends Controller
 {
@@ -15,6 +18,7 @@ class MPackagesController extends Controller
     public function index()
     {
         //
+        return view('tagihan.index');
     }
 
     /**
@@ -25,6 +29,9 @@ class MPackagesController extends Controller
     public function create()
     {
         //
+        $dataAccount = MCoa::where('grup', 'REVENUE')->get();
+        $dataWarga = User::where('cmp_id', Auth::user()->cmp_id)->pluck('name', 'id');
+        return view('tagihan.create', compact('dataAccount', 'dataWarga'));
     }
 
     /**

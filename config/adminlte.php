@@ -258,8 +258,14 @@ return [
             'can'   => 'isAdmin'
         ],
         [
-            'text' => 'Keuangan',
-            'route'  => 'cmp.index',
+            'text' => 'Tagihan',
+            'route'  => 'tagihan.index',
+            'icon' => 'fas fa-fw fa-users',
+            'can'   => ['isRT', 'isBendahara'],
+        ],
+        [
+            'text' => 'Master Coa',
+            'route'  => 'coa.index',
             'icon' => 'fas fa-fw fa-users',
             'can'   => ['isRT', 'isBendahara'],
         ],
@@ -439,6 +445,21 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'DatePicker' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js',
                 ],
             ],
         ],
