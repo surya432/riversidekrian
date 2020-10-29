@@ -19,7 +19,10 @@ class CreateMUserPackagesTable extends Migration
             $table->enum('status', ['open', 'in-proses', 'paid', 'closed', 'post'])->default('open');
             $table->date('date')->nullable();
             $table->string('totalTagihan');
-            $table->integer('user_id');
+            $table->string('update_by')->nullable();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->onDelete('cascade');
             $table->foreignId('m_packages_id')
                 ->constrained()
                 ->onDelete('cascade');

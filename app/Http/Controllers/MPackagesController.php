@@ -68,10 +68,11 @@ class MPackagesController extends Controller
     public function store(Request $request)
     {
         //
+        $nom = str_replace(",00", "", $request->totalTagihan);
         $request->merge([
             'cmp_id' => Auth::user()->cmp_id,
-            "create_by" => Auth::user()->name, "totalTagihan" => str_replace(array("Rp", " ", ".", ",00"), "", $request->totalTagihan),
-
+            "create_by" => Auth::user()->name,
+            "totalTagihan" =>  preg_replace('/\D/', '', $nom),
         ]);
 
         try {
@@ -90,8 +91,19 @@ class MPackagesController extends Controller
                 "m_packages_id" => $tagihan->id,
                 "user_id" => json_encode($request->warga)
             ]);
-
+            // if ($request->tipe == "Sekali") {
+            //     $noInvoice = MUserPackages::where('cmp_id', Auth::user()->cmp_id)->whereMonth('created_at', '=', \Carbon\Carbon::now()->format('m'))->get();
+            //     $no = \Carbon\Carbon::now()->format('Ymd') . str_pad($noInvoice->count(), 3, "0", STR_PAD_LEFT);
+            //     foreach ($request->warga as $a => $b) {
+            //         $request->merge([
+            //             "no" => $no,
+            //             "user_id" => $b
+            //         ]);
+            //         MUserPackages::create($request->only('user_id', 'totalTagihan', 'no', 'm_packages_id', 'cmp_id'));
+            //     }
+            // } else {
             Billed::create($request->only('status', 'm_packages_id', 'cmp_id', 'user_id', 'totalTagihan'));
+            // }
             DB::commit();
             return response()->json(array('status' => true, "message" => "Tagihan berhasil Di buat"), 200);
         } catch (\Throwable $th) {
@@ -153,11 +165,11 @@ class MPackagesController extends Controller
     public function update(Request $request, MPackages $mPackages, $id)
     {
         // dd($request->all());
-
+        $nom = str_replace(",00", "", $request->totalTagihan);
         $request->merge([
             'cmp_id' => Auth::user()->cmp_id,
             "update_by" => Auth::user()->name,
-            "totalTagihan" => str_replace(array("Rp", " ", ".", ",00"), "", $request->totalTagihan),
+            "totalTagihan" =>  preg_replace('/\D/', '', $nom),
         ]);
 
         try {
@@ -170,13 +182,28 @@ class MPackagesController extends Controller
                 $b["m_packages_id"] = $id;
                 MDPackages::create($b);
             }
+
             $request->merge([
                 'cmp_id' => Auth::user()->cmp_id,
                 "create_by" => Auth::user()->name,
                 "m_packages_id" => $id,
+            ]);
+            // if ($request->tipe == "Sekali") {
+            //     $noInvoice = MUserPackages::where('cmp_id', Auth::user()->cmp_id)->whereMonth('created_at', '=', \Carbon\Carbon::now()->format('m'))->get();
+            //     $no = \Carbon\Carbon::now()->format('Ymd') . str_pad($noInvoice->count(), 3, "0", STR_PAD_LEFT);
+            //     foreach ($request->warga as $a => $b) {
+            //         $request->merge([
+            //             "no" => $no,
+            //             "user_id" => $b
+            //         ]);
+            //         MUserPackages::where("m_packages_id", $id)->where('cmp_id', $request->cmp_id)->update($request->only('status',  'user_id', 'totalTagihan'));
+            //     }
+            // } else {
+            $request->merge([
                 "user_id" => $request->warga
             ]);
             Billed::where('m_packages_id', $request->m_packages_id)->update($request->only('status',  'user_id', 'totalTagihan'));
+            // }
             DB::commit();
             return response()->json(array('status' => true, "message" => "Tagihan berhasil Di Ubah"), 200);
         } catch (\Throwable $th) {

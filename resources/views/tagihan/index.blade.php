@@ -28,7 +28,7 @@
                                 <tr>
                                     <th width="5%">No</th>
                                     <th width="45%">Name</th>
-                                    <th width="30%">Tipe</th>
+                                    <th width="30%">Tipe Pembayaran</th>
                                     <th witdh="10%">Status</th>
                                     {{-- <th>Status</th> --}}
                                     <th witdh="10%" class="nosort">Aksi</th>

@@ -28,16 +28,21 @@
                                 <div class="form-group col-6 ">
                                     <label for="">Tipe Tagihan <span class="required">*</span> </label>
                                     <div class="form-control">
+                                        @if($mPackages->tipe != "Bulanan")
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" id="tipe" name="tipe" value="Sekali" <?php if ($mPackages->tipe == "Sekali") echo "checked"; ?>>
                                             <label class="form-check-label" for="tipe" name="tipe">Sekali</label>
                                         </div>
+                                        @endif
+                                        @if($mPackages->tipe != "Sekali")
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan" <?php if ($mPackages->tipe == "Bulanan") echo "checked"; ?>>
                                             <label class="form-check-label" for="inlineCheckbox2" name="tipe">Tiap Bulan</label>
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
+                                @if($mPackages->tipe != "Sekali" && $billed->status == "Aktif")
                                 <div class="form-group col-6 ">
                                     <label for="">Status Tagihan <span class="required">*</span> </label>
                                     <div class="form-control">
@@ -51,6 +56,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                                 <div class="form-group col-6">
                                     <label for="">Tanggal Tagihan <span class="required">*</span> </label>
                                     <input type="date" class="form-control input-sm" name="date" value="{{ $mPackages->date }}" required>
@@ -111,7 +117,9 @@
                         <div class="box-footer">
                             <a href="{{route('tagihan.index')}}" class="btn btn-info">Kembali</a>
                             <button type="reset" class="btn btn-danger">Batal</button>
+                            @if($mPackages->tipe != "Sekali" && $billed->status == "Aktif")
                             <button type="submit" id="simpan" class="btn btn-success simpan">Simpan</button>
+                            @endif
                         </div>
                         {!! Form::close() !!}
                     </div>

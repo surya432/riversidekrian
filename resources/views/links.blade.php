@@ -22,7 +22,14 @@
     <form action="{{ $link_hapus}}" method="post">
         @method('DELETE')
         @csrf
-        <button class='btn btn-sm btn-danger btn-flat '><i class="fas fa-fw  fa-trash" aria-hidden="true"></i></button>
+        <button class="btn btn-sm btn-danger btn-flat"><i class="fas fa-fw  fa-trash" aria-hidden="true"></i></button>
+    </form>
+    @endif
+    @if(!empty($link_payment))
+    <form action="{{ $link_payment}}" method="post">
+        @method('PATCH')
+        @csrf
+        <button class="btn btn-sm btn-primary btn-flat">Bayar</button>
     </form>
     @endif
 

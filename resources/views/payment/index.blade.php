@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'List Tagihan')
+@section('title', 'List Pembayaran')
 
 @section('content_header')
-<h1 class="m-0 text-dark">List Tagihan</h1>
+<h1 class="m-0 text-dark">List Pembayaran</h1>
 @stop
 
 @section('content')
@@ -21,7 +21,7 @@
                                 <tr>
                                     <th width="5%">No</th>
                                     <th width="15%">No Tagihan</th>
-                                    <th width="45%">Name</th>
+                                    <th width="45%">Nama</th>
                                     <th width="15%">Total</th>
                                     <th witdh="10%">Status</th>
                                     {{-- <th>Status</th> --}}
@@ -48,7 +48,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        'url': "{!! route('tagihandt') !!}",
+                        'url': "{!! route('dtpayment') !!}",
                         "type": "GET"
                     },
                     columns: [{
@@ -58,16 +58,19 @@
                             searchable: false
                         },
                         {
+                            data: 'no',
+                            name: 'no'
+                        }, {
                             data: 'name',
                             name: 'name'
                         },
                         {
-                            data: 'tipe',
-                            name: 'tipe'
+                            data: 'totalTagihanRp',
+                            name: 'totalTagihanRp'
                         },
                         {
-                            data: 'status',
-                            name: 'status'
+                            data: 'status-tagihan',
+                            name: 'status-tagihan'
                         },
                         {
                             data: 'action',

@@ -45,7 +45,7 @@
 											<label class="form-check-label" for="status" name="status">Aktif</label>
 										</div>
 										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" id="inlineCheckbox2status" name="status" value="Tidak Aktif" onclick="return false;" <?php if ($billed->tipe == "Tidak Aktif") echo "checked"; ?>>
+											<input class="form-check-input" type="radio" id="inlineCheckbox2status" name="status" value="Tidak Aktif" onclick="return false;" <?php if ($billed->status == "Tidak Aktif") echo "checked"; ?>>
 											<label class="form-check-label" for="inlineCheckbox2status" name="status">Tidak Aktif</label>
 										</div>
 									</div>

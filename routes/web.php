@@ -33,6 +33,8 @@ Route::get('/dashboard', function () {
 
 Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::get('', '\App\Http\Controllers\CmpController@redirectShow')->name('showcmpc');
+    Route::post('payment-status', '\App\Http\Controllers\PaymentController@paymentstatus')->name('payment-status');
+    Route::get('payment-set', '\App\Http\Controllers\PaymentController@paymentset')->name('payment-set');
     Route::resource('cmp', App\Http\Controllers\CmpController::class);
     Route::resource('tagihan', App\Http\Controllers\MPackagesController::class);
     Route::resource('payment', App\Http\Controllers\PaymentController::class);
@@ -43,5 +45,6 @@ Route::prefix('/dt')->middleware('auth')->group(function () {
     Route::get('/cmp', '\App\Http\Controllers\CmpController@json')->name('dtcmp');
     Route::get('/apiCoa', '\App\Http\Controllers\MCoaController@apiCoa')->name('dtcoa');
     Route::get('/tagihan', '\App\Http\Controllers\MPackagesController@json')->name('tagihandt');
+    Route::get('/payment', '\App\Http\Controllers\PaymentController@json')->name('dtpayment');
     Route::get('/getParent/{id}', '\App\Http\Controllers\MCoaController@getParent')->name('dtgetParent');
 });
