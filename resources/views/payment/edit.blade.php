@@ -74,7 +74,7 @@
                                         <select class="form-control select2" name='warga[]' multiple="multiple" style="width: 100%;">
                                             <option value="">== Pilih Warga ==</option>
                                             @foreach ($dataWarga as $id => $name)
-                                            <option value="{{ $id }}" <?php if (in_array($id, json_decode($billed->user_id, true))) {
+                                            <option value="{{ $id }}" <?php if (in_array($id, json_decode($billed, true))) {
                                                                             echo "selected";
                                                                         } ?>>{{ $name }}</option>
                                             @endforeach
@@ -180,19 +180,13 @@
                 html_code += "<td>" + count + "</td>";
                 html_code += "<td>" + dataTagihan[i].name + "</td>";
                 html_code += "<td>" + dataTagihan[i].desc + "</td>";
-                html_code += "<td>" + new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                }).format(dataTagihan[i].nominal) + "</td>";
+                html_code += "<td>Rp. " + dataTagihan[i].nominal + "</td>";;
                 html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].m_coas_id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
                 html_code += "</tr>";
                 totalTagihan = Number(totalTagihan) + Number(dataTagihan[i].nominal);
             });
             $('#tbody').html(html_code);
-            $('.totalTagihan').val(new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-            }).format(totalTagihan));
+            $('.totalTagihan').val(totalTagihan);
 
         }
 

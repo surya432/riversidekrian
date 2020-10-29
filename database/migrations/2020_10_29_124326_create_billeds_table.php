@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMUserPackagesTable extends Migration
+class CreateBilledsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,12 @@ class CreateMUserPackagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('m_user_packages', function (Blueprint $table) {
+        Schema::create('billeds', function (Blueprint $table) {
             $table->id();
-            $table->string('no');
-            $table->enum('status', ['open', 'in-proses', 'paid', 'closed', 'post'])->default('open');
-            $table->date('date')->nullable();
+            $table->enum('status', ['Aktif', 'Tidak Aktif'])->default('Aktif');
             $table->string('totalTagihan');
-            $table->integer('user_id');
-            $table->foreignId('m_packages_id')
-                ->constrained()
-                ->onDelete('cascade');
+            $table->string('user_id');
+            $table->integer('m_packages_id');
             $table->integer('cmp_id');
             $table->timestamps();
             $table->softDeletes();
@@ -36,6 +32,6 @@ class CreateMUserPackagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('m_user_packages');
+        Schema::dropIfExists('billeds');
     }
 }

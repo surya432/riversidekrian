@@ -16,9 +16,7 @@ class CreateMPackagesTable extends Migration
         Schema::create('m_packages', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->enum('tipe', ['Bulanan', 'Sekali']);
-            $table->enum('status', ['Aktif', 'Tidak Aktif']);
-            $table->enum('proses-status', ['in-proses', 'closed', 'post','pending']);
+            $table->enum('tipe', ['Bulanan', 'Sekali'])->default('Sekali');
             $table->date('date');
             $table->date('duedate');
             $table->string('create_by');

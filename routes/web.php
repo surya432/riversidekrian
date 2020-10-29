@@ -35,11 +35,13 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::get('', '\App\Http\Controllers\CmpController@redirectShow')->name('showcmpc');
     Route::resource('cmp', App\Http\Controllers\CmpController::class);
     Route::resource('tagihan', App\Http\Controllers\MPackagesController::class);
+    Route::resource('payment', App\Http\Controllers\PaymentController::class);
     Route::resource('coa', App\Http\Controllers\MCoaController::class);
 });
 
 Route::prefix('/dt')->middleware('auth')->group(function () {
     Route::get('/cmp', '\App\Http\Controllers\CmpController@json')->name('dtcmp');
     Route::get('/apiCoa', '\App\Http\Controllers\MCoaController@apiCoa')->name('dtcoa');
+    Route::get('/tagihan', '\App\Http\Controllers\MPackagesController@json')->name('tagihandt');
     Route::get('/getParent/{id}', '\App\Http\Controllers\MCoaController@getParent')->name('dtgetParent');
 });

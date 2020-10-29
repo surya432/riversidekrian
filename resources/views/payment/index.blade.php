@@ -14,21 +14,15 @@
             <div class="card-body">
                 <div class="box box-primary">
                     <div class="box-body">
-                        <div class="">
-                            @can('isRT')
-                            <a href="{{route('tagihan.create')}}" class="btn btn-success btn-md">
-                                <i class="fa fa-plus"></i> Buat Tagihan baru
-                            </a>
-                            @endcan
-                        </div>
-                        <br>
+
                         @include('displayerror')
                         <table class="table table-striped table-bordered " style="width: 100%!important;" id="table2">
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
+                                    <th width="15%">No Tagihan</th>
                                     <th width="45%">Name</th>
-                                    <th width="30%">Tipe</th>
+                                    <th width="15%">Total</th>
                                     <th witdh="10%">Status</th>
                                     {{-- <th>Status</th> --}}
                                     <th witdh="10%" class="nosort">Aksi</th>

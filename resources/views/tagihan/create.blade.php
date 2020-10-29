@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="form-group col-6">
                                     <label for="">Tanggal Tagihan <span class="required">*</span> </label>
-                                    <input type="date" class="form-control input-sm" name="tgl_faktur_code" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                                    <input type="date" class="form-control input-sm" name="date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
                                     <!-- /.input group -->
                                 </div>
                                 <div class="form-group col-6">
@@ -78,6 +78,7 @@
                                             <tr>
                                                 <th style="width:6%!important">No</th>
                                                 <th>Nama</th>
+                                                <th>Keterangan</th>
                                                 <th>Nominal</th>
                                                 <th style="width:6%!important">Action</th>
                                             </tr>
@@ -126,12 +127,15 @@
                 <div class="form-group">
                     <label>Nominal Tagihan <span class="required">*</span></label>
                     <input type="text" class="form-control input-sm nominal" name="nominal" placeholder="Nominal Tagihan..." maxlength="30" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="acc-code" required>
-
+                </div>
+                <div class="form-group">
+                    <label>Keterangan </label>
+                    <textarea name="desc" class="form-control desc"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" id="saveBtn" value="create" class="btn btn-primary saveBtn">Save changes</button>
+                <button type="submit" id="saveBtn" value="create" class="btn btn-primary saveBtn">Tambahkan Tagihan</button>
             </div>
         </div>
     </div>
@@ -157,16 +161,23 @@
             var totalTagihan = 0;
             dataTagihan.forEach((d, i) => {
                 count = i + 1;
-                html_code += "<tr id='" + dataTagihan[i].id + "'>";
+                html_code += "<tr id='" + dataTagihan[i].m_coas_id + "'>";
                 html_code += "<td>" + count + "</td>";
                 html_code += "<td>" + dataTagihan[i].name + "</td>";
-                html_code += "<td>Rp. " + dataTagihan[i].nominal + "</td>";;
+                html_code += "<td>" + dataTagihan[i].desc + "</td>";
+                html_code += "<td>" + new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                }).format(dataTagihan[i].nominal) + "</td>";
                 html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
                 html_code += "</tr>";
                 totalTagihan = Number(totalTagihan) + Number(dataTagihan[i].nominal);
             });
             $('#tbody').html(html_code);
-            $('.totalTagihan').val(totalTagihan);
+            $('.totalTagihan').val(new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+            }).format(totalTagihan));
 
         }
         $('.saveBtn').click((e) => {
@@ -179,16 +190,30 @@
             }
             var obj = {
                 "name": $('.tagihan :selected').text(),
-                "id": $('.tagihan').val(),
-                "nominal": $('.nominal').val()
+                "m_coas_id": $('.tagihan').val(),
+                "desc": $('.desc').val(),
+                "nominal": $('.nominal').val(),
+                "cmp_id": "{{Auth::user()->cmp_id}}"
             };
-            $('.nominal').val("");
-            $(".tagihan").val('').trigger('change')
+            var isDuplicate = false;
+            for (let el of dataTagihan) {
+                if (el.id === $('.tagihan').val()) {
+                    isDuplicate = true
+                    break;
+                }
+            }
+            if (!isDuplicate) {
+                $('.nominal').val("");
+                $(".tagihan").val('').trigger('change')
 
-            dataTagihan.push(obj);
-            console.log(dataTagihan);
-            rebuildTagihan();
-            $('#modal').modal('hide');
+                dataTagihan.push(obj);
+                console.log(dataTagihan);
+                rebuildTagihan();
+                $('#modal').modal('hide');
+            } else {
+                swal2("error", "Tagihan Sudah Di pilih.");
+            }
+
 
         });
 
@@ -212,16 +237,16 @@
             var datas = $('#myForm').serializeArray();
             datas.push({
                 name: 'detail',
-                value: dataTagihan
+                value: JSON.stringify(dataTagihan)
             });
             console.log(datas);
             $.ajax({
                 url: "{{route('tagihan.store')}}",
                 method: "POST",
                 data: datas,
-                contentType: "application/json",
-
+                dataType: "json",
                 success: function(data) {
+                    swal2('success', "Berhasil Di simpan");
                     window.location = "{{route('tagihan.index')}}";
                 },
                 error: function(xhr, status, error) {

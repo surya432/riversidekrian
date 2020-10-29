@@ -260,7 +260,7 @@ return [
         [
             'text' => 'Tagihan',
             'route'  => 'tagihan.index',
-            'icon' => 'fas fa-fw fa-users',
+            'icon' => 'fas fa-fw fa-ticket',
             'can'   => ['isRT', 'isBendahara'],
         ],
         [
@@ -270,9 +270,9 @@ return [
             'can'   => ['isRT', 'isBendahara'],
         ],
         [
-            'text' => 'Laporan',
-            'url'  => 'dashboard',
-            'icon' => 'fas fa-fw fa-users',
+            'text' => 'Pembayaran',
+            'route'  => 'payment.index',
+            'icon' => 'fas fa-fw fa-money',
             'can'   => ['isRT', 'isBendahara', 'isWarga']
         ],
         [

@@ -23,47 +23,34 @@
                             <div class="row">
                                 <div class="form-group col-6 ">
                                     <label for="">Nama Tagihan<span class="required">*</span> </label>
-                                    {{ Form::text('name', $mPackages->id, array_merge(['class' => 'form-control','require'=>true,'readonly'=>true])) }}
+                                    {{ Form::text('name', null, array_merge(['class' => 'form-control','require'=>true])) }}
                                 </div>
                                 <div class="form-group col-6 ">
                                     <label for="">Tipe Tagihan <span class="required">*</span> </label>
                                     <div class="form-control">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="tipe" name="tipe" value="Sekali" <?php if ($mPackages->tipe == "Sekali") echo "checked"; ?>>
+                                            <input class="form-check-input" type="radio" id="tipe" name="tipe" value="Sekali">
                                             <label class="form-check-label" for="tipe" name="tipe">Sekali</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan" <?php if ($mPackages->tipe == "Bulanan") echo "checked"; ?>>
+                                            <input class="form-check-input" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan">
                                             <label class="form-check-label" for="inlineCheckbox2" name="tipe">Tiap Bulan</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-6 ">
-                                    <label for="">Status Tagihan <span class="required">*</span> </label>
-                                    <div class="form-control">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="status" name="status" value="Aktif" <?php if ($billed->status == "Aktif") echo "checked"; ?>>
-                                            <label class="form-check-label" for="status" name="status">Aktif</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="inlineCheckbox2status" name="status" value="Tidak Aktif" <?php if ($billed->status == "Tidak Aktif") echo "checked"; ?>>
-                                            <label class="form-check-label" for="inlineCheckbox2status" name="status">Tidak Aktif</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group col-6">
                                     <label for="">Tanggal Tagihan <span class="required">*</span> </label>
-                                    <input type="date" class="form-control input-sm" name="date" value="{{ $mPackages->date }}" required>
+                                    <input type="date" class="form-control input-sm" name="date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
                                     <!-- /.input group -->
                                 </div>
                                 <div class="form-group col-6">
                                     <label for="">Jatuh Tempo <span class="required">*</span> </label>
-                                    <input type="date" class="form-control input-sm" name="duedate" value="{{$mPackages->duedate}}" required>
+                                    <input type="date" class="form-control input-sm" name="duedate" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
                                     <!-- /.input group -->
                                 </div>
                                 <div class="form-group col-6">
                                     <label for="">Total Tagihan</label>
-                                    <input type="text" class="form-control input-sm totalTagihan" name="totalTagihan" value="{{$billed->totalTagihan}}" readonly>
+                                    <input type="text" class="form-control input-sm totalTagihan" name="totalTagihan" value="" readonly>
                                     <!-- /.input group -->
                                 </div>
                                 <div class="col-6">
@@ -74,9 +61,7 @@
                                         <select class="form-control select2" name='warga[]' multiple="multiple" style="width: 100%;">
                                             <option value="">== Pilih Warga ==</option>
                                             @foreach ($dataWarga as $id => $name)
-                                            <option value="{{ $id }}" <?php if (in_array($id, json_decode($billed->user_id, true))) {
-                                                                            echo "selected";
-                                                                        } ?>>{{ $name }}</option>
+                                            <option value="{{ $id }}">{{ $name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -180,30 +165,18 @@
                 html_code += "<td>" + count + "</td>";
                 html_code += "<td>" + dataTagihan[i].name + "</td>";
                 html_code += "<td>" + dataTagihan[i].desc + "</td>";
-                html_code += "<td>" + new Intl.NumberFormat('id-ID', {
+                html_code += "<td>Rp. " + new Intl.NumberFormat('en', {
                     style: 'currency',
-                    currency: 'IDR',
-                }).format(dataTagihan[i].nominal) + "</td>";
-                html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].m_coas_id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
+                    currency: 'GBP'
+                }).format(dataTagihan[i].nominal) + "</td>";;
+                html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
                 html_code += "</tr>";
                 totalTagihan = Number(totalTagihan) + Number(dataTagihan[i].nominal);
             });
             $('#tbody').html(html_code);
-            $('.totalTagihan').val(new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-            }).format(totalTagihan));
+            $('.totalTagihan').val(totalTagihan);
 
         }
-
-        function rebuildTagihan2() {
-            var datas = <?php echo $dataDetail ?>;
-            datas.forEach((m, i) => {
-                dataTagihan.push(m);
-            });
-            rebuildTagihan();
-        };
-        rebuildTagihan2();
         $('.saveBtn').click((e) => {
             e.preventDefault();
             if ($('.tagihan').val() == "") {
@@ -221,7 +194,7 @@
             };
             var isDuplicate = false;
             for (let el of dataTagihan) {
-                if (el.m_coas_id === $('.tagihan').val()) {
+                if (el.id === $('.tagihan').val()) {
                     isDuplicate = true
                     break;
                 }
@@ -248,7 +221,7 @@
             console.log(id);
             dataTagihan = dataTagihan.filter(function(d, i) {
                 console.log(i + " " + id);
-                return id !== d.m_coas_id
+                return id !== d.id
             })
             console.log(dataTagihan)
             rebuildTagihan();
@@ -265,8 +238,8 @@
             });
             console.log(datas);
             $.ajax({
-                url: "{{route('tagihan.update',$mPackages->id)}}",
-                method: "PATCH",
+                url: "{{route('tagihan.store')}}",
+                method: "POST",
                 data: datas,
                 dataType: "json",
                 success: function(data) {
