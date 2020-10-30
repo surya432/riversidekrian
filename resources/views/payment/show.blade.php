@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Buat Tagihan baru')
+@section('title', 'Lihat Detail Pembayaran')
 
 @section('content_header')
 <h1 class="m-0 text-dark"></h1>
@@ -16,70 +16,40 @@
 				<div class="col-md-12">
 					<div class="box box-info">
 						<div class="box-header with-border">
-							<h3 class="box-title">Lihat Tagihan </h3>
+							<h3 class="box-title">Lihat Detail Pembayaran</h3>
+
+
 						</div>
 						<div class="box-body">
 							<div class="row">
 								<div class="form-group col-6 ">
-									<label for="">Nama Tagihan<span class="required">*</span> </label>
-									{{ Form::text('name', $mPackages->id, array_merge(['class' => 'form-control','require'=>true,'readonly'=>true])) }}
+									<label for="">No Tagihan </label>
+									{{ Form::text('name', $data->no, array_merge(['class' => 'form-control','require'=>true,'readonly'=>true])) }}
 								</div>
 								<div class="form-group col-6 ">
-									<label for="">Tipe Tagihan <span class="required">*</span> </label>
-									<div class="form-control">
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" id="tipe" name="tipe" value="Sekali" onclick="return false;" <?php if ($mPackages->tipe == "Sekali") echo "checked"; ?>>
-											<label class="form-check-label" for="tipe" name="tipe">Sekali</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan" onclick="return false;" <?php if ($mPackages->tipe == "Bulanan") echo "checked"; ?>>
-											<label class="form-check-label" for="inlineCheckbox2" name="tipe">Tiap Bulan</label>
-										</div>
-									</div>
+									<label for="">Tipe Tagihan </label>
+									{{ Form::text('tipe', $data->payment->tipe, array_merge(['class' => 'form-control','require'=>true,'readonly'=>true])) }}
+
+								</div>
+								<div class="form-group col-6">
+									<label for="">Nama</label>
+									{{ Form::text('name', $data->userdetail->name, array_merge(['class' => 'form-control','require'=>true,'readonly'=>true])) }} <!-- /.input group -->
 								</div>
 								<div class="form-group col-6 ">
-									<label for="">Status Tagihan <span class="required">*</span> </label>
-									<div class="form-control">
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" id="status" name="status" value="Aktif" onclick="return false;" <?php if ($mPackages->status == "Aktif") echo "checked"; ?>>
-											<label class="form-check-label" for="status" name="status">Aktif</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" id="inlineCheckbox2status" name="status" value="Tidak Aktif" onclick="return false;" <?php if ($mPackages->tipe == "Tidak Aktif") echo "checked"; ?>>
-											<label class="form-check-label" for="inlineCheckbox2status" name="status">Tidak Aktif</label>
-										</div>
-									</div>
+									<label for="">Status Tagihan </label>
+									{{ Form::text('status', $data->status, array_merge(['class' => 'form-control','require'=>true,'readonly'=>true])) }}
 								</div>
 								<div class="form-group col-6">
-									<label for="">Tanggal Tagihan <span class="required">*</span> </label>
-									<input type="date" class="form-control input-sm" name="date" value="{{ $mPackages->date }}" readonly>
+									<label for="">Tanggal Tagihan </label>
+									<input type="date" class="form-control input-sm" name="date" value="{{ $data->date }}" readonly>
 									<!-- /.input group -->
 								</div>
 								<div class="form-group col-6">
-									<label for="">Jatuh Tempo <span class="required">*</span> </label>
-									<input type="date" class="form-control input-sm" name="duedate" value="{{$mPackages->duedate}}" readonly>
+									<label for="">Total Tagihan </label>
+									<input type="text" class="form-control input-sm totalTagihan" name="duedate" value="{{$data->totalTagihan}}" readonly>
 									<!-- /.input group -->
 								</div>
-								<div class="form-group col-6">
-									<label for="">Total Tagihan</label>
-									<input type="text" class="form-control input-sm totalTagihan" name="totalTagihan" value="{{$mPackages->totalTagihan}}" readonly>
-									<!-- /.input group -->
-								</div>
-								<div class="col-6">
-									<div class="text-right" style="display: none;"> <button class='btn btn-sm btn-primary btn-flat '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Pelangan</button>
-									</div>
-									<div class="form-group">
-										<label>Warga Pelangan <span class="required">*</span></label>
-										<select class="form-control select2" name='warga[]' multiple="multiple" style="width: 100%;" readonly>
-											<option value="">== Pilih Warga ==</option>
-											@foreach ($dataWarga as $id => $name)
-											<option value="{{ $id }}" <?php if (in_array($id, $dataUser)) {
-																			echo "selected";
-																		} ?>>{{ $name }}</option>
-											@endforeach
-										</select>
-									</div>
-								</div>
+
 							</div>
 							<hr>
 
@@ -103,48 +73,13 @@
 							</div>
 							<hr />
 						</div>
+						<a href="{{route('payment.index')}}" class="btn btn-info">Kembali</a>
 
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<div class="modal" id="modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Tambah Tagihan</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="form-group">
-					<label>Warga Pelangan <span class="required">*</span></label>
-					<select class="form-control select2 tagihan" name='tagihan' style="width: 100%;">
-						<option value="">== Pilih Pembayaran ==</option>
-						@foreach ($dataAccount as $id => $name)
-						<option value="{{ $name->code }}">{{ $name->desc }}</option>
-						@endforeach
-					</select>
-				</div>
-				<div class="form-group">
-					<label>Nominal Tagihan <span class="required">*</span></label>
-					<input type="text" class="form-control input-sm nominal" name="nominal" placeholder="Nominal Tagihan..." maxlength="30" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="acc-code" required>
-				</div>
-				<div class="form-group">
-					<label>Keterangan </label>
-					<textarea name="desc" class="form-control desc"></textarea>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="submit" id="saveBtn" value="create" class="btn btn-primary saveBtn">Tambahkan Tagihan</button>
-			</div>
-		</div>
-	</div>
-</div>
 </div>
 @stop
 @section('js')
@@ -161,7 +96,8 @@
 		$('.btn-add-tagihan').click((e) => {
 			e.preventDefault();
 		});
-		var dataTagihan = <?php echo $dataDetail ?>;
+
+		var dataTagihan = <?php echo $data->payment->detailpayment ?>;
 		var count = 1;
 
 		function rebuildTagihan() {
@@ -179,7 +115,10 @@
 				totalTagihan = Number(totalTagihan) + Number(dataTagihan[i].nominal);
 			});
 			$('#tbody').html(html_code);
-			$('.totalTagihan').val(totalTagihan);
+			$('.totalTagihan').val(new Intl.NumberFormat('id-ID', {
+				style: 'currency',
+				currency: 'IDR',
+			}).format(totalTagihan));
 
 		}
 		rebuildTagihan();
@@ -235,29 +174,6 @@
 
 		});
 
-		$('#simpan').click(function(e) {
-			e.preventDefault()
-			var datas = $('#myForm').serializeArray();
-			datas.push({
-				name: 'detail',
-				value: JSON.stringify(dataTagihan)
-			});
-			console.log(datas);
-			$.ajax({
-				url: "{{route('tagihan.update',$mPackages->id)}}",
-				method: "POST",
-				data: datas,
-				dataType: "json",
-				success: function(data) {
-					swal2('success', "Berhasil Di simpan");
-					window.location = "{{route('tagihan.index')}}";
-				},
-				error: function(xhr, status, error) {
-					var err = JSON.parse(xhr.responseText);
-					swal2('error', err.Message);
-				}
-			});
-		});
 
 	});
 </script>

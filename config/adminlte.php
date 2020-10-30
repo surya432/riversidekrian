@@ -258,22 +258,30 @@ return [
             'can'   => 'isAdmin'
         ],
         [
-            'text' => 'Tagihan',
-            'route'  => 'tagihan.index',
-            'icon' => 'fas fa-fw fa-ticket',
+            'text' => 'Master',
+            'url'     => '#',
+            'icon' => 'fas fa-fw fa-database',
             'can'   => ['isRT', 'isBendahara'],
+            'submenu' => [
+                [
+                    'text' => 'Tagihan',
+                    // 'icon' => 'fas fa-fw fa-credit-card',
+                    'route'  => 'tagihan.index',
+                ],
+                [
+                    'text' => 'Master Coa',
+                    'route'  => 'coa.index',
+                    // 'icon' => 'fas fa-fw fa-users',
+                    'can'   => ['isBendahara'],
+                ],
+            ]
         ],
-        [
-            'text' => 'Master Coa',
-            'route'  => 'coa.index',
-            'icon' => 'fas fa-fw fa-users',
-            'can'   => ['isRT', 'isBendahara'],
-        ],
+
         [
             'text' => 'Pembayaran',
             'route'  => 'payment.index',
-            'icon' => 'fas fa-fw fa-money',
-            'can'   => ['isRT', 'isBendahara', 'isWarga']
+            'icon' => 'fas fa-fw fa-credit-card',
+            'can'   => ['isRT', 'isBendahara']
         ],
         [
             'header' => 'account_settings',

@@ -169,7 +169,7 @@
                     style: 'currency',
                     currency: 'IDR',
                 }).format(dataTagihan[i].nominal) + "</td>";
-                html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
+                html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].m_coas_id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
                 html_code += "</tr>";
                 totalTagihan = Number(totalTagihan) + Number(dataTagihan[i].nominal);
             });
@@ -205,6 +205,7 @@
             if (!isDuplicate) {
                 $('.nominal').val("");
                 $(".tagihan").val('').trigger('change')
+                $('.desc').val("");
 
                 dataTagihan.push(obj);
                 console.log(dataTagihan);

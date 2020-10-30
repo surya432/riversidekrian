@@ -92,8 +92,8 @@
 
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="text-left"> <button data-toggle="modal" data-target="#modal" class='btn btn-sm btn-primary btn-flat btn-add-tagihan '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Tagihan</button>
-                                    </div>
+                                    <!-- <div class="text-left"> <button data-toggle="modal" data-target="#modal" class='btn btn-sm btn-primary btn-flat btn-add-tagihan '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Tagihan</button>
+                                    </div> -->
                                     <table class="table table-striped table-bordered dataTable">
                                         <thead>
                                             <tr>
@@ -116,8 +116,8 @@
                         </div>
                         <div class="box-footer">
                             <a href="{{route('tagihan.index')}}" class="btn btn-info">Kembali</a>
-                            <button type="reset" class="btn btn-danger">Batal</button>
                             @if($mPackages->tipe != "Sekali" && $billed->status == "Aktif")
+                            <button type="reset" class="btn btn-danger">Batal</button>
                             <button type="submit" id="simpan" class="btn btn-success simpan">Simpan</button>
                             @endif
                         </div>

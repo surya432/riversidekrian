@@ -10,6 +10,7 @@ GET http://localhost:8000/api/provinsi
 
 ###
 GET http://localhost:8000/api/provinsi/15
+
 ###
 GET http://localhost:8000/api/kabupaten/24
 ###

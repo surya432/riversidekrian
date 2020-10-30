@@ -103,7 +103,10 @@
 							</div>
 							<hr />
 						</div>
+						<div class="box-footer">
+							<a href="{{route('tagihan.index')}}" class="btn btn-info">Kembali</a>
 
+						</div>
 					</div>
 				</div>
 			</div>

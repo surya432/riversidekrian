@@ -21,14 +21,24 @@ class MPackagesController extends Controller
             //$query di masukkan kedalam Datatables
             ->addColumn('action', function ($q) {
                 //Kemudian kita menambahkan kolom baru , yaitu "action"
-                return view('links', [
+                $button = [
                     //Kemudian dioper ke file links.blade.php
                     'model' => $q,
-                    'link_edit' => route('tagihan.edit', $q->id),
                     // 'link_hapus' => route('tagihan.destroy', $q->id),
                     'link_show' => route('tagihan.show', $q->id),
                     // 'url_detail' => route('permission.show', $q->id),
-                ]);
+                ];
+                if ($q->tipe != "Sekali") {
+                    $button = [
+                        //Kemudian dioper ke file links.blade.php
+                        'model' => $q,
+                        // 'link_hapus' => route('tagihan.destroy', $q->id),
+                        'link_show' => route('tagihan.show', $q->id),
+                        'link_edit' => route('tagihan.edit', $q->id)
+                        // 'url_detail' => route('permission.show', $q->id),
+                    ];
+                }
+                return view('links', $button);
             })
             ->addIndexColumn()
             // ->rawColumns(['other-columns'])

@@ -44,4 +44,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function cmpdetail()
+    {
+        return $this->belongsTo('App\Models\Cmp', 'cmp_id');
+    }
 }

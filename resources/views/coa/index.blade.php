@@ -17,11 +17,9 @@
                 <div class="box box-primary">
                     <div class="box-body">
                         <div class="">
-                            @can('isRT')
                             <a href="{{route('coa.create')}}" class="btn btn-success btn-md">
                                 <i class="fa fa-plus"></i> Buat Data
                             </a>
-                            @endcan
                         </div>
                         <br>
                         @include('displayerror')
