@@ -62,6 +62,7 @@ class MCoaController extends Controller
         $request->merge([
             'code' => $code,
             'parent_id' => $parent_id,
+            'desc' =>  strtoupper($request->desc),
             'cmp_id' => Auth::user()->cmp_id,
         ]);
 
@@ -121,6 +122,7 @@ class MCoaController extends Controller
     public function update(Request $request, $id)
     {
         // dd($request->all());
+        $request->merge(['desc' => strtoupper($request->desc),]);
         MCoaModel::where('id', $id)->update($request->except('_token', '_method', 'code'));
 
         return redirect()->route('coa.index');

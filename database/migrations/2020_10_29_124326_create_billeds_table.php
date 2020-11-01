@@ -18,9 +18,8 @@ class CreateBilledsTable extends Migration
             $table->enum('status', ['Aktif', 'Tidak Aktif'])->default('Aktif');
             $table->string('totalTagihan');
             $table->string('user_id');
-            $table->integer('m_packages_id');
+            $table->text('detail');
             $table->datetime('last_run')->nullable();
-
             $table->integer('cmp_id');
             $table->timestamps();
             $table->softDeletes();

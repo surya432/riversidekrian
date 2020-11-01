@@ -14,7 +14,7 @@ class PaymentController extends Controller
 
     public function json(Request $request)
     {
-        $usersPayments = \App\Models\MUserPackages::join('users', 'm_user_packages.user_id', 'users.id')->where("m_user_packages.cmp_id", Auth::user()->cmp_id)->whereIn("m_user_packages.status", ['in-proses', 'paid'])->orderBy('m_user_packages.status', 'asc')->orderBy('m_user_packages.id', 'desc')->select('m_user_packages.*', 'users.name')->get();
+        $usersPayments = \App\Models\MUserPackages::join('users', 'm_user_packages.user_id', 'users.id')->where("m_user_packages.cmp_id", Auth::user()->cmp_id)->orderBy('m_user_packages.status', 'asc')->orderBy('m_user_packages.id', 'desc')->select('m_user_packages.*', 'users.name')->get();
         return \Yajra\Datatables\Datatables::of($usersPayments)
             //$query di masukkan kedalam Datatables
             ->addColumn('totalTagihanRp', function ($q) {
@@ -24,13 +24,15 @@ class PaymentController extends Controller
             ->addColumn('status-tagihan', function ($q) {
                 if ($q->status == 'in-proses') {
                     return "Belum Dibayar";
-                } else {
+                } elseif ($q->status == 'paid') {
                     return "Sudah Dibayar";
+                } elseif ($q->status == 'post') {
+                    return "Pembayaran Diterima";
                 }
             })
             ->addColumn('action', function ($q) {
                 //Kemudian kita menambahkan kolom baru , yaitu "action"
-                if ($q->status == 'in-proses') {
+                if ($q->status == 'in-proses' || $q->status == 'paid') {
                     return view('links', [
                         //Kemudian dioper ke file links.blade.php
                         'model' => $q,
@@ -38,6 +40,7 @@ class PaymentController extends Controller
                         // 'link_hapus' => route('tagihan.destroy', $q->id),
                         // 'link_show' => route('tagihan.show', $q->id),
                         // 'url_detail' => route('permission.show', $q->id),
+                        'link_show' => route('payment.show', $q->id),
                         'link_payment' => route('payment.update', $q->id),
                     ]);
                 } else {
@@ -154,11 +157,20 @@ class PaymentController extends Controller
     public function update(Request $request, $id)
     {
         //
-        MUserPackages::where([
-            "cmp_id" => Auth::user()->cmp_id,
-            "id" => $id,
-        ])->update(['status' => "paid", 'update_by' => Auth::user()->name]);
-        return redirect()->route('payment.index')->with('message', 'Status Berhasil Diubah.');;
+        DB::beginTransaction();
+        try {
+
+            DB::table('m_user_packages')->where([
+                "cmp_id" => Auth::user()->cmp_id,
+                "id" => $id,
+            ])->update(['status' => "post", 'update_by' => Auth::user()->id]);
+
+            DB::commit();
+            return redirect()->route('payment.index')->with('message', 'Konfirmasi Pembayaran Berhasil .');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(array('status' => false, "message" => "Tagihan Gagal Di buat", "error" => $th->getMessage()), 500);
+        }
     }
 
     /**

@@ -16,9 +16,10 @@ class CreateMUserPackagesTable extends Migration
         Schema::create('m_user_packages', function (Blueprint $table) {
             $table->id();
             $table->string('no');
-            $table->enum('status', ['open', 'in-proses', 'paid', 'closed', 'post'])->default('open');
+            $table->enum('status', ['open', 'in-proses', 'paid', 'post', 'closed'])->default('open');
             $table->date('date')->nullable();
             $table->string('totalTagihan');
+            $table->string('note')->nullable();
             $table->string('update_by')->nullable();
             $table->foreignId('user_id')
                 ->constrained()

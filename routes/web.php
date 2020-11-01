@@ -35,10 +35,16 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::get('', '\App\Http\Controllers\CmpController@redirectShow')->name('showcmpc');
     Route::post('payment-status', '\App\Http\Controllers\PaymentController@paymentstatus')->name('payment-status');
     Route::get('payment-set', '\App\Http\Controllers\PaymentController@paymentset')->name('payment-set');
-    Route::resource('cmp', App\Http\Controllers\CmpController::class);
-    Route::resource('tagihan', App\Http\Controllers\MPackagesController::class);
-    Route::resource('payment', App\Http\Controllers\PaymentController::class);
-    Route::resource('coa', App\Http\Controllers\MCoaController::class);
+    Route::get('accounting/interface-detail/{id}', '\App\Http\Controllers\MInterfaceController@interfaceDetail')->name('interface-detail');
+    Route::resources([
+        'payment' => 'App\Http\Controllers\PaymentController',
+        'cmp' => 'App\Http\Controllers\CmpController',
+        'tagihan' => 'App\Http\Controllers\MPackagesController',
+        'coa' => 'App\Http\Controllers\MCoaController',
+        'pengeluaran' => 'App\Http\Controllers\PengeluaranController',
+        'pemasukan' => 'App\Http\Controllers\PengeluaranController',
+        'minteface' => 'App\Http\Controllers\MInterfaceController',
+    ]);
 });
 
 Route::prefix('/dt')->middleware('auth')->group(function () {

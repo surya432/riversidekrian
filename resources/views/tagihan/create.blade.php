@@ -29,11 +29,11 @@
                                     <label for="">Tipe Tagihan <span class="required">*</span> </label>
                                     <div class="form-control">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="tipe" name="tipe" value="Sekali">
+                                            <input class="form-check-input cbSekali" type="radio" id="tipe" name="tipe" value="Sekali">
                                             <label class="form-check-label" for="tipe" name="tipe">Sekali</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan">
+                                            <input class="form-check-input cbBulanan" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan">
                                             <label class="form-check-label" for="inlineCheckbox2" name="tipe">Tiap Bulan</label>
                                         </div>
                                     </div>
@@ -116,7 +116,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Warga Pelangan <span class="required">*</span></label>
+                    <label>Jenis Iuran <span class="required">*</span></label>
                     <select class="form-control select2 tagihan" name='tagihan' style="width: 100%;">
                         <option value="">== Pilih Pembayaran ==</option>
                         @foreach ($dataAccount as $id => $name)
@@ -128,7 +128,7 @@
                     <label>Nominal Tagihan <span class="required">*</span></label>
                     <input type="text" class="form-control input-sm nominal" name="nominal" placeholder="Nominal Tagihan..." maxlength="30" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="acc-code" required>
                 </div>
-                <div class="form-group">
+                <div class="form-group desc-form" id="formdesc">
                     <label>Keterangan </label>
                     <textarea name="desc" class="form-control desc"></textarea>
                 </div>
@@ -155,6 +155,21 @@
         });
         var dataTagihan = [];
         var count = 1;
+
+        function hideshow() {
+            var x = document.getElementById("formdesc");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+        $('.cbBulanan').click((e) => {
+            hideshow();
+        });
+        $('.cbSekali').click((e) => {
+            hideshow();
+        });
 
         function rebuildTagihan() {
             var html_code = "";
@@ -248,7 +263,7 @@
                 dataType: "json",
                 success: function(data) {
                     swal2('success', "Berhasil Di simpan");
-                    window.location = "{{route('tagihan.index')}}";
+                    // window.location = "{{route('tagihan.index')}}";
                 },
                 error: function(xhr, status, error) {
                     var err = JSON.parse(xhr.responseText);

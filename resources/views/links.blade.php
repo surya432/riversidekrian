@@ -29,7 +29,7 @@
     <form action="{{ $link_payment}}" method="post">
         @method('PATCH')
         @csrf
-        <button class="btn btn-sm btn-primary btn-flat">Bayar</button>
+        <button class="btn btn-sm btn-primary btn-flat">Konfirmasi</button>
     </form>
     @endif
 

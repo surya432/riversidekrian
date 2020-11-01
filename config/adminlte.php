@@ -257,31 +257,62 @@ return [
             'icon' => 'fas fa-fw fa-users',
             'can'   => 'isAdmin'
         ],
+
         [
-            'text' => 'Master',
-            'url'     => '#',
-            'icon' => 'fas fa-fw fa-database',
+            'text' => 'Tagihan',
+            'icon' => 'fas fa-fw fa-file-invoice',
+            'route'  => 'tagihan.index',
+        ],
+        [
+            'text' => 'Pembayaran',
+            'route'  => 'payment.index',
+            'icon' => 'fas fa-fw fa-cash-register',
+            'can'   => ['isRT', 'isBendahara']
+        ],
+        [
+            'text' => 'Pemasukan',
+            'route'  => 'pemasukan.index',
+            'icon' => 'fas fa-fw fa-money-bill-alt',
+            'can'   => ['isRT', 'isBendahara']
+        ],
+        [
+            'text' => 'Pengeluaran',
+            'route'  => 'pengeluaran.index',
+            'icon' => 'fas fa-fw fa-money-bill-alt',
+            'can'   => ['isRT', 'isBendahara']
+        ],
+        [
+            'text' => 'Laporan',
+            'icon' => 'fas fa-fw fa-chart-line',
             'can'   => ['isRT', 'isBendahara'],
             'submenu' => [
-                [
-                    'text' => 'Tagihan',
-                    // 'icon' => 'fas fa-fw fa-credit-card',
-                    'route'  => 'tagihan.index',
-                ],
+
                 [
                     'text' => 'Master Coa',
                     'route'  => 'coa.index',
                     // 'icon' => 'fas fa-fw fa-users',
-                    'can'   => ['isBendahara'],
+                    'can'   => ['isBendahara', 'isRT',],
                 ],
             ]
         ],
-
         [
-            'text' => 'Pembayaran',
-            'route'  => 'payment.index',
-            'icon' => 'fas fa-fw fa-credit-card',
-            'can'   => ['isRT', 'isBendahara']
+            'text' => 'Master',
+            'icon' => 'fas fa-fw fa-database',
+            'can'   => ['isRT', 'isBendahara'],
+            'submenu' => [
+
+                [
+                    'text' => 'COA',
+                    'route'  => 'coa.index',
+                    // 'icon' => 'fas fa-fw fa-users',
+                    'can'   => ['isBendahara', 'isRT',],
+                ],
+                [
+                    'text' => 'Interface COA',
+                    'route'  => 'minteface.index',
+                    // 'icon' => 'fas fa-fw fa-users',
+                ],
+            ]
         ],
         [
             'header' => 'account_settings',

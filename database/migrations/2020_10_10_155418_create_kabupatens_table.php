@@ -17,6 +17,8 @@ class CreateKabupatensTable extends Migration
         Schema::create('kabupatens', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('ibukota');
+            $table->string('k_bsni');
             $table->foreignId('provinsi_id')
                 ->constrained()
                 ->onDelete('cascade');

@@ -21,9 +21,9 @@
                                 <tr>
                                     <th width="5%">No</th>
                                     <th width="15%">No Tagihan</th>
-                                    <th width="45%">Nama</th>
+                                    <th width="35%">Nama</th>
                                     <th width="15%">Total</th>
-                                    <th witdh="10%">Status</th>
+                                    <th witdh="20%">Status</th>
                                     {{-- <th>Status</th> --}}
                                     <th witdh="10%" class="nosort">Aksi</th>
                                 </tr>

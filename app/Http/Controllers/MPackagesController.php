@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Billed;
 use App\Models\MCoa;
 use App\Models\MDPackages;
+use App\Models\MInterface;
 use App\Models\MPackages;
 use App\Models\MUserPackages;
 use App\Models\User;
@@ -16,7 +17,8 @@ class MPackagesController extends Controller
 {
     public function json(Request $request)
     {
-        $data = \App\Models\MPackages::join('billeds', 'billeds.m_packages_id', 'm_packages.id')->where("m_packages.cmp_id", Auth::user()->cmp_id)->select('m_packages.*', 'billeds.status')->orderBy('id', 'desc')->get();
+        // $data = \App\Models\MPackages::join('billeds', 'billeds.m_packages_id', 'm_packages.id')->where("m_packages.cmp_id", Auth::user()->cmp_id)->select('m_packages.*', 'billeds.status')->orderBy('id', 'desc')->get();
+        $data = \App\Models\Billed::with('packages')->orderBy('id', 'desc')->get();
         return \Yajra\Datatables\Datatables::of($data)
             //$query di masukkan kedalam Datatables
             ->addColumn('action', function ($q) {
@@ -64,7 +66,13 @@ class MPackagesController extends Controller
     public function create()
     {
         //
-        $dataAccount = MCoa::where('grup', 'REVENUE')->get();
+        $dataMaster = MInterface::where('var', "VAR_RECEIPT")->first();
+        $coaLike = explode(',', $dataMaster->code_coa);
+        $dataAccount = MCoa::where(function ($query) use ($coaLike) {
+            for ($i = 0; $i < count($coaLike); $i++) {
+                $query->orwhere('code', 'like',  $coaLike[$i] . '%');
+            }
+        })->whereNotIn('code', $coaLike)->get();
         $dataWarga = User::where('cmp_id', Auth::user()->cmp_id)->pluck('name', 'id');
         return view('tagihan.create', compact('dataAccount', 'dataWarga'));
     }
@@ -87,18 +95,18 @@ class MPackagesController extends Controller
 
         try {
             DB::beginTransaction();
-            $tagihan =  MPackages::create($request->only('name', 'tipe', 'date', 'duedate',  'create_by', 'cmp_id'));
-            $dataDetail = $request->only('detail');
+            // $tagihan =  MPackages::create($request->only('name', 'tipe', 'date', 'duedate',  'create_by', 'cmp_id'));
+            // $dataDetail = $request->only('detail');
 
-            foreach (json_decode($dataDetail['detail'], true) as $a => $b) {
-                $b["m_packages_id"] = $tagihan->id;
+            // foreach (json_decode($dataDetail['detail'], true) as $a => $b) {
+            //     $b["m_packages_id"] = $tagihan->id;
 
-                MDPackages::create($b);
-            }
+            //     MDPackages::create($b);
+            // }
             $request->merge([
                 'cmp_id' => Auth::user()->cmp_id,
                 "create_by" => Auth::user()->name,
-                "m_packages_id" => $tagihan->id,
+                // "m_packages_id" => $tagihan->id,
                 "user_id" => json_encode($request->warga)
             ]);
             // if ($request->tipe == "Sekali") {

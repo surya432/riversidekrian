@@ -16,6 +16,7 @@ class CreateProvinsisTable extends Migration
         Schema::create('provinsis', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('p_bsni');
             $table->softDeletes();
             $table->timestamps();
         });

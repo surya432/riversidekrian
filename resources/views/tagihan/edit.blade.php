@@ -101,7 +101,7 @@
                                                 <th>Nama</th>
                                                 <th>Keterangan</th>
                                                 <th>Nominal</th>
-                                                <th style="width:6%!important">Action</th>
+                                                <!-- <th style="width:6%!important">Action</th> -->
                                             </tr>
                                         </thead>
                                         <tbody id='tbody'>
@@ -192,7 +192,7 @@
                     style: 'currency',
                     currency: 'IDR',
                 }).format(dataTagihan[i].nominal) + "</td>";
-                html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].m_coas_id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
+                // html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].m_coas_id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
                 html_code += "</tr>";
                 totalTagihan = Number(totalTagihan) + Number(dataTagihan[i].nominal);
             });

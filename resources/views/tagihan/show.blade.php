@@ -21,42 +21,26 @@
 						<div class="box-body">
 							<div class="row">
 								<div class="form-group col-6 ">
-									<label for="">Nama Tagihan<span class="required">*</span> </label>
+									<label for="">Nama Tagihan </label>
 									{{ Form::text('name', $mPackages->id, array_merge(['class' => 'form-control','require'=>true,'readonly'=>true])) }}
 								</div>
 								<div class="form-group col-6 ">
-									<label for="">Tipe Tagihan <span class="required">*</span> </label>
-									<div class="form-control">
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" id="tipe" name="tipe" value="Sekali" onclick="return false;" <?php if ($mPackages->tipe == "Sekali") echo "checked"; ?>>
-											<label class="form-check-label" for="tipe" name="tipe">Sekali</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan" onclick="return false;" <?php if ($mPackages->tipe == "Bulanan") echo "checked"; ?>>
-											<label class="form-check-label" for="inlineCheckbox2" name="tipe">Tiap Bulan</label>
-										</div>
-									</div>
+									<label for="">Tipe Tagihan </label>
+									<input type="text" class="form-control input-sm" name="date" value="{{ $mPackages->tipe }}" readonly>
+
 								</div>
 								<div class="form-group col-6 ">
-									<label for="">Status Tagihan <span class="required">*</span> </label>
-									<div class="form-control">
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" id="status" name="status" value="Aktif" onclick="return false;" <?php if ($billed->status == "Aktif") echo "checked"; ?>>
-											<label class="form-check-label" for="status" name="status">Aktif</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" id="inlineCheckbox2status" name="status" value="Tidak Aktif" onclick="return false;" <?php if ($billed->status == "Tidak Aktif") echo "checked"; ?>>
-											<label class="form-check-label" for="inlineCheckbox2status" name="status">Tidak Aktif</label>
-										</div>
-									</div>
+									<label for="">Status Tagihan </label>
+									<input type="text" class="form-control input-sm" name="date" value="{{ $billed->status }}" readonly>
+
 								</div>
 								<div class="form-group col-6">
-									<label for="">Tanggal Tagihan <span class="required">*</span> </label>
+									<label for="">Tanggal Tagihan </label>
 									<input type="date" class="form-control input-sm" name="date" value="{{ $mPackages->date }}" readonly>
 									<!-- /.input group -->
 								</div>
 								<div class="form-group col-6">
-									<label for="">Jatuh Tempo <span class="required">*</span> </label>
+									<label for="">Jatuh Tempo </label>
 									<input type="date" class="form-control input-sm" name="duedate" value="{{$mPackages->duedate}}" readonly>
 									<!-- /.input group -->
 								</div>
@@ -69,7 +53,7 @@
 									<div class="text-right" style="display: none;"> <button class='btn btn-sm btn-primary btn-flat '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Pelangan</button>
 									</div>
 									<div class="form-group">
-										<label>Warga Pelangan <span class="required">*</span></label>
+										<label>Warga Pelangan </label>
 										<select class="form-control select2" name='warga[]' multiple="multiple" style="width: 100%;" readonly>
 											<option value="">== Pilih Warga ==</option>
 											@foreach ($dataWarga as $id => $name)
@@ -124,7 +108,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<label>Warga Pelangan <span class="required">*</span></label>
+					<label>Warga Pelangan </label>
 					<select class="form-control select2 tagihan" name='tagihan' style="width: 100%;">
 						<option value="">== Pilih Pembayaran ==</option>
 						@foreach ($dataAccount as $id => $name)
@@ -133,7 +117,7 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<label>Nominal Tagihan <span class="required">*</span></label>
+					<label>Nominal Tagihan </label>
 					<input type="text" class="form-control input-sm nominal" name="nominal" placeholder="Nominal Tagihan..." maxlength="30" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="acc-code" required>
 				</div>
 				<div class="form-group">

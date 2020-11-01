@@ -10,4 +10,8 @@ class Billed extends Model
     use HasFactory;
     use \Illuminate\Database\Eloquent\SoftDeletes;
     protected $guarded = ['id'];
+    public function packages()
+    {
+        return $this->hasOne('App\Models\MPackages');
+    }
 }

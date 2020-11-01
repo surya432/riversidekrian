@@ -17,8 +17,6 @@
 					<div class="box box-info">
 						<div class="box-header with-border">
 							<h3 class="box-title">Lihat Detail Pembayaran</h3>
-
-
 						</div>
 						<div class="box-body">
 							<div class="row">
@@ -73,10 +71,13 @@
 							</div>
 							<hr />
 						</div>
-						<a href="{{route('payment.index')}}" class="btn btn-info">Kembali</a>
+						<div class="box-footer">
+							<a href="{{route('payment.index')}}" class="btn btn-info">Kembali</a>
 
+						</div>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
@@ -170,8 +171,6 @@
 			})
 			console.log(dataTagihan)
 			rebuildTagihan();
-
-
 		});
 
 
