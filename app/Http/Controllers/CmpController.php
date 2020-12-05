@@ -14,14 +14,14 @@ class CmpController extends Controller
 {
     public function redirectShow()
     {
-        // if (User::find(Auth::user()->id)->first()->hasRole('super-admin')) {
-        //     return view('home');
-        // }
-        $data = Cmp::find(Auth::user()->cmp_id)->with(['provinsi', 'kabupaten', 'kecamatan', 'kelurahan', 'warga', 'rumah' => function ($q) {
+        if (User::find(Auth::user()->id)->first()->hasRole('super-admin')) {
+            return view('home');
+        }
+        $data = Cmp::with(['provinsi', 'kabupaten', 'kecamatan', 'kelurahan', 'warga', 'rumah' => function ($q) {
             $q
                 ->join('rumahs', 'rumahs.id', '=', 'homeusers.rumah_id')
                 ->select('rumahs.*');
-        }])->first();
+        }])->where('id',Auth::user()->id)->first();
         return view('cmp.show', compact('data'));
     }
     public function json(Request $request)
@@ -85,9 +85,7 @@ class CmpController extends Controller
      * @param  \App\Models\Cmp  $cmp
      * @return \Illuminate\Http\Response
      */
-    private static function showcmp()
-    {
-    }
+   
     public function show(Cmp $cmp)
     {
         $data = $cmp::with(['provinsi', 'kabupaten', 'kecamatan', 'kelurahan', 'warga', 'rumah' => function ($q) {
@@ -95,6 +93,7 @@ class CmpController extends Controller
                 ->join('rumahs', 'rumahs.id', '=', 'homeusers.rumah_id')
                 ->select('rumahs.*');
         }])->first();
+        // dd($data);  
         return view('cmp.show', compact('data'));
     }
     /**

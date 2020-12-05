@@ -7012,8 +7012,8 @@ class KecamatanSeed extends Seeder
         ];
         foreach ($wilayah_kecamatan as $a => $b) {
             \App\Models\Kecamatan::firstOrCreate(
-                ["name" => $b['name'], "kabupaten_id" => $b['id'], "id" => $b['id']],
-                ["name" => $b['name'], "kabupaten_id" => $b['id'], "id" => $b['id']]
+                ["name" => $b['name'], "kabupaten_id" => $b['kabupaten_id'], "id" => $b['id']],
+                ["name" => $b['name'], "kabupaten_id" => $b['kabupaten_id'], "id" => $b['id']]
             );
             $this->command->warn("Data wilayah_kecamatan, " . $b['name'] . " " .  $b['id'] . ".");
         }
