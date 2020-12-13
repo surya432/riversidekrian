@@ -34,7 +34,7 @@ class PaymentController extends Controller
             })
             ->addColumn('action', function ($q) {
                 //Kemudian kita menambahkan kolom baru , yaitu "action"
-                if (\Carbon\Carbon::createFromFormat('Y-m-d', $q->date)->lte(\Carbon\Carbon::now()->format('Y-m-d')) && $q->status != "post" ||  $q->status != "in-proses") {
+                if (\Carbon\Carbon::createFromFormat('Y-m-d', $q->date)->gte(\Carbon\Carbon::now()->format('Y-m-d')) && $q->status != "post" ||  $q->status != "in-proses") {
                     return view('links', [
                         //Kemudian dioper ke file links.blade.php
                         'model' => $q,
@@ -67,7 +67,7 @@ class PaymentController extends Controller
         try {
 
             DB::beginTransaction();
-          
+
             DB::commit();
             return response()->json(array('status' => true, "message" => "Tagihan berhasil Di buat"), 200);
         } catch (\Throwable $th) {
