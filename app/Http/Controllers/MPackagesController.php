@@ -82,11 +82,12 @@ class MPackagesController extends Controller
             'cmp_id' => Auth::user()->cmp_id,
             "create_by" => Auth::user()->name,
             "totalTagihan" =>  preg_replace('/\D/', '', $nom),
+            "next_run" =>  $request->only('tipe') != "Sekali" ? \Carbon\Carbon::now()->addMonth() : null,
         ]);
 
         try {
             DB::beginTransaction();
-            $tagihan =  MPackages::create($request->only('name', 'tipe', 'date', 'duedate',  'create_by', 'cmp_id'));
+            $tagihan =  MPackages::create($request->only('name', 'tipe', 'date', 'duedate', 'status', 'create_by', 'next_run', 'cmp_id'));
             $detail = $request->only('detail');
             $d_Detail = json_decode($detail['detail'], true);
             foreach ($d_Detail as $a => $b) {

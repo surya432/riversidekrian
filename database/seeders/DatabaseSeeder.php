@@ -21,15 +21,15 @@ class DatabaseSeeder extends Seeder
 
         //    $this->command->call("migrate:fresh");
         // $this->command->call('migrate');
-        // $this->command->call('import:datawilayah');
+        $this->command->call('import:datawilayah');
         // $this->command->call('setting:freshall');
 
         $this->call([
 
-            ProvinsiSeed::class,
-            KabupatenSeed::class,
-            KecamatanSeed::class,
-            KelurahanSeed::class,
+            // ProvinsiSeed::class,
+            // KabupatenSeed::class,
+            // KecamatanSeed::class,
+            // KelurahanSeed::class,
             AccountSeed::class,
             COASeed::class,
             InterfaceSeed::class,

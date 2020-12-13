@@ -22,6 +22,7 @@ class CreateMPackagesTable extends Migration
             $table->date('duedate');
             $table->string('create_by');
             $table->string('update_by')->nullable();
+            $table->string('next_run')->nullable();
             $table->integer('cmp_id');
             $table->timestamps();
             $table->softDeletes();

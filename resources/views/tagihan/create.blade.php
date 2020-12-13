@@ -38,6 +38,19 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group col-6 ">
+                                    <label for="">Status Tagihan <span class="required">*</span> </label>
+                                    <div class="form-control">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input cbAktif" type="radio" id="statusAktif" name="status" value="aktif">
+                                            <label class="form-check-label" for="statusAktif" name="status">Aktif</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input cbTidakAktif" type="radio" id="statusTidakAktif" name="status" value="tidak aktif">
+                                            <label class="form-check-label" for="statusTidakAktif" name="status">Tidak Aktif</label>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="form-group col-6">
                                     <label for="">Tanggal Tagihan <span class="required">*</span> </label>
                                     <input type="date" class="form-control input-sm" name="date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
@@ -67,27 +80,50 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr>
-
                             <div class="row">
-                                <div class="col-12">
-                                    <div class="text-left"> <button data-toggle="modal" data-target="#modal" class='btn btn-sm btn-primary btn-flat btn-add-tagihan '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Tagihan</button>
+                                <div class="col-12 ">
+                                    <div class="card card-primary card-outline card-outline-tabs">
+                                        <div class="card-header p-0 pt-1 border-bottom-0">
+                                            <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" id="custom-tab-tagihan-tab" data-toggle="pill" href="#custom-tab-tagihan" role="tab" aria-controls="custom-tab-tagihan" aria-selected="true">Detail Tagihan</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">Warga Pelangan</a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="tab-content" id="custom-tabs-two-tabContent">
+                                                <div class="tab-pane fade active show" id="custom-tab-tagihan" role="tabpanel" aria-labelledby="custom-tab-tagihan-tab">
+                                                    <div class="text-left"> <button data-toggle="modal" data-target="#modal" class='btn btn-sm btn-primary btn-flat btn-add-tagihan '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Tagihan</button>
+                                                    </div>
+                                                    <table class="table table-striped table-bordered dataTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:6%!important">No</th>
+                                                                <th>Nama</th>
+                                                                <th>Keterangan</th>
+                                                                <th>Nominal</th>
+                                                                <th style="width:6%!important">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id='tbody'>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
+                                                    Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam.
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- /.card -->
                                     </div>
-                                    <table class="table table-striped table-bordered dataTable">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:6%!important">No</th>
-                                                <th>Nama</th>
-                                                <th>Keterangan</th>
-                                                <th>Nominal</th>
-                                                <th style="width:6%!important">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id='tbody'>
+                                </div>
+                                <div class="col-12">
 
-
-                                        </tbody>
-                                    </table>
                                 </div>
 
                             </div>
