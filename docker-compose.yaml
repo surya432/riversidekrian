@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+  app:
+    container_name: riverside-app
+    build:
+      args:
+        user: suryaheho
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: riverside
+    container_name: riverside-app
+    restart: unless-stopped
+    working_dir: ${WORK_DIR}
+    volumes:
+      - ./:/var/www
+    networks:
+      - riverside
+
+  db:
+    image: mysql:5.7
+    container_name: riverside-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - riverside
+
+  nginx:
+    image: nginx:alpine
+    container_name: riverside-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - riverside
+
+networks:
+  riverside:
+    driver: bridge
