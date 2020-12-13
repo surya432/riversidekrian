@@ -20,7 +20,6 @@ class COASeed extends Seeder
             array("code" => 1, "desc" => "AKTIVA", "debet_credit" => "debet", "grup" => "ASSET"),
             array("code" => 101, "desc" => "AKTIVA LANCAR", "debet_credit" => "debet", "grup" => "ASSET"),
             array("code" => 10101, "desc" => "KAS", "debet_credit" => "debet", "grup" => "ASSET"),
-
             array("code" => 10103, "desc" => "PIUTANG", "debet_credit" => "debet", "grup" => "ASSET"),
             array("code" => 1010301, "desc" => "BON SEMENTARA", "debet_credit" => "debet", "grup" => "ASSET"),
             array("code" => 1010302, "desc" => "PIUTANG IURAN RUTIN", "debet_credit" => "debet", "grup" => "ASSET"),

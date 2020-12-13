@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Buat Tagihan baru')
+@section('title', 'Buat Pengeluaran baru')
 
 @section('content_header')
 <h1 class="m-0 text-dark"></h1>

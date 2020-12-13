@@ -281,36 +281,56 @@ return [
             'icon' => 'fas fa-fw fa-money-bill-alt',
             'can'   => ['isRT', 'isBendahara']
         ],
+
         [
-            'text' => 'Laporan',
-            'icon' => 'fas fa-fw fa-chart-line',
+            'text' => 'Master',
+            'icon' => 'fas fa-fw fa-database',
             'can'   => ['isRT', 'isBendahara'],
             'submenu' => [
-
                 [
-                    'text' => 'Master Coa',
+                    'text' => 'Warga',
                     'route'  => 'coa.index',
                     // 'icon' => 'fas fa-fw fa-users',
                     'can'   => ['isBendahara', 'isRT',],
                 ],
-            ]
+                [
+                    'text' => 'Rumah',
+                    'route'  => 'coa.index',
+                    // 'icon' => 'fas fa-fw fa-users',
+                    'can'   => ['isBendahara', 'isRT',],
+                ],
+            ],
         ],
         [
-            'text' => 'Master',
-            'icon' => 'fas fa-fw fa-database',
+            'text' => 'Accounting',
+            'icon' => 'fas fa-fw fa-chart-line',
             'can'   => ['isRT', 'isBendahara'],
             'submenu' => [
 
                 [
                     'text' => 'COA',
                     'route'  => 'coa.index',
-                    // 'icon' => 'fas fa-fw fa-users',
+                    // 'icon' => 'fas fa-fw fa-banks',
                     'can'   => ['isBendahara', 'isRT',],
                 ],
                 [
                     'text' => 'Interface COA',
                     'route'  => 'minteface.index',
                     // 'icon' => 'fas fa-fw fa-users',
+                ],
+                [
+                    'text' => 'Laporan',
+                    'icon' => 'fas fa-fw fa-chart-line',
+                    'can'   => ['isRT', 'isBendahara'],
+                    'submenu' => [
+
+                        [
+                            'text' => 'Master Coa',
+                            'route'  => 'coa.index',
+                            // 'icon' => 'fas fa-fw fa-users',
+                            'can'   => ['isBendahara', 'isRT',],
+                        ],
+                    ]
                 ],
             ]
         ],

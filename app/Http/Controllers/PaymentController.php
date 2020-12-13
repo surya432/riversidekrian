@@ -22,17 +22,19 @@ class PaymentController extends Controller
                     "Rp " . number_format((int)trim($q->totalTagihan), 2, ',', '.');
             })
             ->addColumn('status-tagihan', function ($q) {
-                if ($q->status == 'in-proses') {
+                if (\Carbon\Carbon::createFromFormat('Y-m-d', $q->date)->lte(\Carbon\Carbon::now()->format('Y-m-d'))) {
                     return "Belum Dibayar";
                 } elseif ($q->status == 'paid') {
                     return "Sudah Dibayar";
                 } elseif ($q->status == 'post') {
                     return "Pembayaran Diterima";
+                } else {
+                    return "Open";
                 }
             })
             ->addColumn('action', function ($q) {
                 //Kemudian kita menambahkan kolom baru , yaitu "action"
-                if ($q->status == 'in-proses' || $q->status == 'paid') {
+                if (\Carbon\Carbon::createFromFormat('Y-m-d', $q->date)->lte(\Carbon\Carbon::now()->format('Y-m-d')) && $q->status != "post" ||  $q->status != "in-proses") {
                     return view('links', [
                         //Kemudian dioper ke file links.blade.php
                         'model' => $q,
@@ -65,24 +67,7 @@ class PaymentController extends Controller
         try {
 
             DB::beginTransaction();
-            $data = \App\Models\Billed::join('m_packages', 'm_packages.id', 'billeds.m_packages_id')->select('m_packages.tipe', 'm_packages.date', 'billeds.*')->where('billeds.status', 'Aktif')->whereMonth('m_packages.date', '=', \Carbon\Carbon::now()->format('m'))->whereDay('m_packages.date', '=', \Carbon\Carbon::now()->format('d'))->get();
-            $datas = [];
-            foreach ($data as $a => $b) {
-                foreach (json_decode($b->user_id, true) as  $bc) {
-                    $noInvoice = MUserPackages::where('cmp_id', Auth::user()->cmp_id)->whereMonth('created_at', '=', \Carbon\Carbon::now()->format('m'))->get();
-                    $no = \Carbon\Carbon::now()->format('Ym') . str_pad($noInvoice->count() + 1, 4, "0", STR_PAD_LEFT);
-                    $b["no"] = $no;
-                    $dataInsert = ['no' => $no, 'm_packages_id' => $b->m_packages_id, 'status' => "in-proses", "date" => \Carbon\Carbon::now()->format('Y-m-d'), "totalTagihan" => $b->totalTagihan, "user_id" => $bc, "cmp_id" => $b->cmp_id];
-                    $datacheck = ['m_packages_id' => $b->m_packages_id, 'status' => "in-proses", "date" => \Carbon\Carbon::now()->format('Y-m-d'), "totalTagihan" => $b->totalTagihan, "user_id" => $bc, "cmp_id" => $b->cmp_id];
-                    $insert = MUserPackages::firstOrCreate($datacheck, $dataInsert);
-                    array_push($datas, $insert);
-                }
-                if ($b->tipe == "Sekali") {
-                    Billed::find($b->id)->update(['status' => "Tidak Aktif", 'last_run' => \Carbon\Carbon::now()->format('Y-m-d H:i:s')]);
-                } else {
-                    Billed::find($b->id)->update(['last_run' => \Carbon\Carbon::now()->format('Y-m-d H:i:s')]);
-                }
-            }
+          
             DB::commit();
             return response()->json(array('status' => true, "message" => "Tagihan berhasil Di buat"), 200);
         } catch (\Throwable $th) {
@@ -133,6 +118,7 @@ class PaymentController extends Controller
     {
         //
         $data =  MUserPackages::with('Payment', 'userDetail')->find($id);
+        // dd($data);
         return view('payment.show', compact('data'));
     }
 

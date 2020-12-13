@@ -17,6 +17,7 @@ class CreateMPackagesTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->enum('tipe', ['Bulanan', 'Sekali'])->default('Sekali');
+            $table->enum('status', ['aktif', 'tidak aktif'])->default('aktif');
             $table->date('date');
             $table->date('duedate');
             $table->string('create_by');

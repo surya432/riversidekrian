@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Billed;
 use App\Models\MCoa;
 use App\Models\MDPackages;
 use App\Models\MInterface;
@@ -17,29 +16,21 @@ class MPackagesController extends Controller
 {
     public function json(Request $request)
     {
-        // $data = \App\Models\MPackages::join('billeds', 'billeds.m_packages_id', 'm_packages.id')->where("m_packages.cmp_id", Auth::user()->cmp_id)->select('m_packages.*', 'billeds.status')->orderBy('id', 'desc')->get();
-        $data = \App\Models\Billed::with('packages')->orderBy('id', 'desc')->get();
+        $data = \App\Models\MPackages::where("m_packages.cmp_id", Auth::user()->cmp_id)->orderBy('id', 'desc')->get();
+        // $data = \App\Models\Billed::with('packages')->orderBy('id', 'desc')->get();
         return \Yajra\Datatables\Datatables::of($data)
             //$query di masukkan kedalam Datatables
             ->addColumn('action', function ($q) {
                 //Kemudian kita menambahkan kolom baru , yaitu "action"
+
                 $button = [
                     //Kemudian dioper ke file links.blade.php
                     'model' => $q,
                     // 'link_hapus' => route('tagihan.destroy', $q->id),
                     'link_show' => route('tagihan.show', $q->id),
+                    'link_edit' => route('tagihan.edit', $q->id)
                     // 'url_detail' => route('permission.show', $q->id),
                 ];
-                if ($q->tipe != "Sekali") {
-                    $button = [
-                        //Kemudian dioper ke file links.blade.php
-                        'model' => $q,
-                        // 'link_hapus' => route('tagihan.destroy', $q->id),
-                        'link_show' => route('tagihan.show', $q->id),
-                        'link_edit' => route('tagihan.edit', $q->id)
-                        // 'url_detail' => route('permission.show', $q->id),
-                    ];
-                }
                 return view('links', $button);
             })
             ->addIndexColumn()
@@ -95,32 +86,35 @@ class MPackagesController extends Controller
 
         try {
             DB::beginTransaction();
-            // $tagihan =  MPackages::create($request->only('name', 'tipe', 'date', 'duedate',  'create_by', 'cmp_id'));
-            // $dataDetail = $request->only('detail');
-
-            // foreach (json_decode($dataDetail['detail'], true) as $a => $b) {
-            //     $b["m_packages_id"] = $tagihan->id;
-
-            //     MDPackages::create($b);
-            // }
+            $tagihan =  MPackages::create($request->only('name', 'tipe', 'date', 'duedate',  'create_by', 'cmp_id'));
+            $detail = $request->only('detail');
+            $d_Detail = json_decode($detail['detail'], true);
+            foreach ($d_Detail as $a => $b) {
+                $mPackagesId = array();
+                $b["m_packages_id"] = $tagihan->id;
+                // MDPackages::create($b);
+                DB::table('m_d_packages')->insert($b);
+            }
             $request->merge([
                 'cmp_id' => Auth::user()->cmp_id,
                 "create_by" => Auth::user()->name,
-                // "m_packages_id" => $tagihan->id,
+                "m_packages_id" => $tagihan->id,
                 "user_id" => json_encode($request->warga)
             ]);
             // if ($request->tipe == "Sekali") {
-            //     $noInvoice = MUserPackages::where('cmp_id', Auth::user()->cmp_id)->whereMonth('created_at', '=', \Carbon\Carbon::now()->format('m'))->get();
-            //     $no = \Carbon\Carbon::now()->format('Ymd') . str_pad($noInvoice->count(), 3, "0", STR_PAD_LEFT);
-            //     foreach ($request->warga as $a => $b) {
-            //         $request->merge([
-            //             "no" => $no,
-            //             "user_id" => $b
-            //         ]);
-            //         MUserPackages::create($request->only('user_id', 'totalTagihan', 'no', 'm_packages_id', 'cmp_id'));
-            //     }
-            // } else {
-            Billed::create($request->only('status', 'm_packages_id', 'cmp_id', 'user_id', 'totalTagihan'));
+            foreach ($request->warga as $a => $b) {
+                $noInvoice = MUserPackages::where('cmp_id', Auth::user()->cmp_id)->whereMonth('created_at', '=', \Carbon\Carbon::now()->format('m'))->get();
+                $no = \Carbon\Carbon::now()->format('Y/m/') . str_pad($noInvoice->count() + 1, 3, "0", STR_PAD_LEFT);
+                $request->merge([
+                    "no" => $no,
+                    "user_id" => $b,
+                    "date" => \Carbon\Carbon::now()->format('Y/m/d'),
+                    "note" => \Carbon\Carbon::now()->format('M Y')
+                ]);
+                MUserPackages::create($request->only('user_id', 'totalTagihan', 'no', 'date', 'note', 'm_packages_id', 'cmp_id'));
+            }
+            // }
+            //  else {
             // }
             DB::commit();
             return response()->json(array('status' => true, "message" => "Tagihan berhasil Di buat"), 200);
@@ -140,14 +134,13 @@ class MPackagesController extends Controller
     {
         $dataAccount = MCoa::where('grup', 'REVENUE')->get();
         $dataWarga = User::where('cmp_id', Auth::user()->cmp_id)->pluck('name', 'id');
-        $dataDetail = MDPackages::where('cmp_id', Auth::user()->cmp_id)->where('m_packages_id', $id)->get();
+        $dataDetail = MDPackages::with('d_packages')->where('cmp_id', Auth::user()->cmp_id)->where('m_packages_id', $id)->get();
         if (count($dataDetail) < 1) {
             abort(404);
         }
         $mPackages = MPackages::find($id);
         $dataUser = MUserPackages::where('cmp_id', Auth::user()->cmp_id)->where('m_packages_id', $mPackages->id)->pluck('user_id')->toArray();
-        $billed = Billed::where('cmp_id', Auth::user()->cmp_id)->where('m_packages_id', $mPackages->id)->first();
-        return view('tagihan.show', compact('dataAccount', 'mPackages', 'dataWarga', 'dataDetail', 'dataUser', 'billed'));
+        return view('tagihan.show', compact('dataAccount', 'mPackages', 'dataWarga', 'dataDetail', 'dataUser'));
     }
 
     /**
@@ -168,9 +161,9 @@ class MPackagesController extends Controller
         }
         $mPackages = MPackages::find($id);
         $dataUser = MUserPackages::where('cmp_id', Auth::user()->cmp_id)->where('m_packages_id', $mPackages->id)->pluck('user_id')->toArray();
-        $billed = Billed::where('cmp_id', Auth::user()->cmp_id)->where('m_packages_id', $mPackages->id)->first();
+        // $billed = Billed::where('cmp_id', Auth::user()->cmp_id)->where('m_packages_id', $mPackages->id)->first();
 
-        return view('tagihan.edit', compact('dataAccount', 'mPackages', 'dataWarga', 'dataDetail', 'dataUser', 'billed'));
+        return view('tagihan.edit', compact('dataAccount', 'mPackages', 'dataWarga', 'dataDetail', 'dataUser'));
     }
 
     /**
@@ -220,7 +213,7 @@ class MPackagesController extends Controller
             $request->merge([
                 "user_id" => $request->warga
             ]);
-            Billed::where('m_packages_id', $request->m_packages_id)->update($request->only('status',  'user_id', 'totalTagihan'));
+            // Billed::where('m_packages_id', $request->m_packages_id)->update($request->only('status',  'user_id', 'totalTagihan'));
             // }
             DB::commit();
             return response()->json(array('status' => true, "message" => "Tagihan berhasil Di Ubah"), 200);

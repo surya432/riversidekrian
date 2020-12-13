@@ -27,8 +27,6 @@
                                     <th width="5%">No</th>
                                     <th width="45%">Name</th>
                                     <th width="30%">Tipe Pembayaran</th>
-                                    <th witdh="10%">Status</th>
-                                    {{-- <th>Status</th> --}}
                                     <th witdh="10%" class="nosort">Aksi</th>
                                 </tr>
                             </thead>
@@ -45,40 +43,37 @@
     @stop
     @section('js')
     <script>
-        $(document).ready(function() {
-            table =
-                $('#table2').DataTable({
-                    //server-side
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        'url': "{!! route('tagihandt') !!}",
-                        "type": "GET"
+    $(document).ready(function() {
+        table =
+            $('#table2').DataTable({
+                //server-side
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': "{!! route('tagihandt') !!}",
+                    "type": "GET"
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
                     },
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex',
-                            orderable: false,
-                            searchable: false
-                        },
-                        {
-                            data: 'name',
-                            name: 'name'
-                        },
-                        {
-                            data: 'tipe',
-                            name: 'tipe'
-                        },
-                        {
-                            data: 'status',
-                            name: 'status'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action'
-                        },
-                    ]
-                });
-        });
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'tipe',
+                        name: 'tipe'
+                    },
+
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            });
+    });
     </script>
     @stop

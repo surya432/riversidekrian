@@ -28,30 +28,27 @@
                                 <div class="form-group col-6 ">
                                     <label for="">Tipe Tagihan <span class="required">*</span> </label>
                                     <div class="form-control">
-                                        @if($mPackages->tipe != "Bulanan")
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" id="tipe" name="tipe" value="Sekali" <?php if ($mPackages->tipe == "Sekali") echo "checked"; ?>>
                                             <label class="form-check-label" for="tipe" name="tipe">Sekali</label>
                                         </div>
-                                        @endif
-                                        @if($mPackages->tipe != "Sekali")
+
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan" <?php if ($mPackages->tipe == "Bulanan") echo "checked"; ?>>
                                             <label class="form-check-label" for="inlineCheckbox2" name="tipe">Tiap Bulan</label>
                                         </div>
-                                        @endif
                                     </div>
                                 </div>
-                                @if($mPackages->tipe != "Sekali" && $billed->status == "Aktif")
+                                @if($mPackages->tipe != "Sekali" && $mPackages->status == "Aktif")
                                 <div class="form-group col-6 ">
                                     <label for="">Status Tagihan <span class="required">*</span> </label>
                                     <div class="form-control">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="status" name="status" value="Aktif" <?php if ($billed->status == "Aktif") echo "checked"; ?>>
+                                            <input class="form-check-input" type="radio" id="status" name="status" value="Aktif" <?php if ($mPackages->status == "Aktif") echo "checked"; ?>>
                                             <label class="form-check-label" for="status" name="status">Aktif</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="inlineCheckbox2status" name="status" value="Tidak Aktif" <?php if ($billed->status == "Tidak Aktif") echo "checked"; ?>>
+                                            <input class="form-check-input" type="radio" id="inlineCheckbox2status" name="status" value="Tidak Aktif" <?php if ($mPackages->status == "Tidak Aktif") echo "checked"; ?>>
                                             <label class="form-check-label" for="inlineCheckbox2status" name="status">Tidak Aktif</label>
                                         </div>
                                     </div>
@@ -69,7 +66,7 @@
                                 </div>
                                 <div class="form-group col-6">
                                     <label for="">Total Tagihan</label>
-                                    <input type="text" class="form-control input-sm totalTagihan" name="totalTagihan" value="{{$billed->totalTagihan}}" readonly>
+                                    <input type="text" class="form-control input-sm totalTagihan" name="totalTagihan" value="{{$mPackages->totalTagihan}}" readonly>
                                     <!-- /.input group -->
                                 </div>
                                 <div class="col-6">
@@ -80,7 +77,7 @@
                                         <select class="form-control select2" name='warga[]' multiple="multiple" style="width: 100%;">
                                             <option value="">== Pilih Warga ==</option>
                                             @foreach ($dataWarga as $id => $name)
-                                            <option value="{{ $id }}" <?php if (in_array($id, json_decode($billed->user_id, true))) {
+                                            <option value="{{ $id }}" <?php if (in_array($id, $dataUser)) {
                                                                             echo "selected";
                                                                         } ?>>{{ $name }}</option>
                                             @endforeach
@@ -99,7 +96,6 @@
                                             <tr>
                                                 <th style="width:6%!important">No</th>
                                                 <th>Nama</th>
-                                                <th>Keterangan</th>
                                                 <th>Nominal</th>
                                                 <!-- <th style="width:6%!important">Action</th> -->
                                             </tr>
@@ -116,7 +112,7 @@
                         </div>
                         <div class="box-footer">
                             <a href="{{route('tagihan.index')}}" class="btn btn-info">Kembali</a>
-                            @if($mPackages->tipe != "Sekali" && $billed->status == "Aktif")
+                            @if($mPackages->tipe != "Sekali" )
                             <button type="reset" class="btn btn-danger">Batal</button>
                             <button type="submit" id="simpan" class="btn btn-success simpan">Simpan</button>
                             @endif
@@ -151,10 +147,7 @@
                     <label>Nominal Tagihan <span class="required">*</span></label>
                     <input type="text" class="form-control input-sm nominal" name="nominal" placeholder="Nominal Tagihan..." maxlength="30" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="acc-code" required>
                 </div>
-                <div class="form-group">
-                    <label>Keterangan </label>
-                    <textarea name="desc" class="form-control desc"></textarea>
-                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -167,127 +160,126 @@
 @stop
 @section('js')
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('.select2').select2();
-        $('#datepicker').datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd'
-        })
-        $('.btn-add-tagihan').click((e) => {
-            e.preventDefault();
-        });
-        var dataTagihan = [];
-        var count = 1;
+$(document).ready(function() {
+    $('.select2').select2();
+    $('#datepicker').datepicker({
+        autoclose: true,
+        format: 'yyyy-mm-dd'
+    })
+    $('.btn-add-tagihan').click((e) => {
+        e.preventDefault();
+    });
+    var dataTagihan = [];
+    var count = 1;
 
-        function rebuildTagihan() {
-            var html_code = "";
-            var totalTagihan = 0;
-            dataTagihan.forEach((d, i) => {
-                count = i + 1;
-                html_code += "<tr id='" + dataTagihan[i].m_coas_id + "'>";
-                html_code += "<td>" + count + "</td>";
-                html_code += "<td>" + dataTagihan[i].name + "</td>";
-                html_code += "<td>" + dataTagihan[i].desc + "</td>";
-                html_code += "<td>" + new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                }).format(dataTagihan[i].nominal) + "</td>";
-                // html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].m_coas_id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
-                html_code += "</tr>";
-                totalTagihan = Number(totalTagihan) + Number(dataTagihan[i].nominal);
-            });
-            $('#tbody').html(html_code);
-            $('.totalTagihan').val(new Intl.NumberFormat('id-ID', {
+    function rebuildTagihan() {
+        var html_code = "";
+        var totalTagihan = 0;
+        dataTagihan.forEach((d, i) => {
+            count = i + 1;
+            html_code += "<tr id='" + dataTagihan[i].m_coas_id + "'>";
+            html_code += "<td>" + count + "</td>";
+            html_code += "<td>" + dataTagihan[i].name + "</td>";
+            html_code += "<td>" + new Intl.NumberFormat('id-ID', {
                 style: 'currency',
                 currency: 'IDR',
-            }).format(totalTagihan));
+            }).format(dataTagihan[i].nominal) + "</td>";
+            // html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].m_coas_id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
+            html_code += "</tr>";
+            totalTagihan = Number(totalTagihan) + Number(dataTagihan[i].nominal);
+        });
+        $('#tbody').html(html_code);
+        $('.totalTagihan').val(new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+        }).format(totalTagihan));
 
+    }
+
+    function rebuildTagihan2() {
+        var datas = <?php echo $dataDetail ?>;
+        datas.forEach((m, i) => {
+            dataTagihan.push(m);
+        });
+        rebuildTagihan();
+    };
+    rebuildTagihan2();
+    $('.saveBtn').click((e) => {
+        e.preventDefault();
+        if ($('.tagihan').val() == "") {
+            return;
+        }
+        if ($('.nominal').val() == "") {
+            return;
+        }
+        var obj = {
+            "name": $('.tagihan :selected').text(),
+            "m_coas_id": $('.tagihan').val(),
+            "desc": $('.desc').val(),
+            "nominal": $('.nominal').val(),
+            "cmp_id": "{{Auth::user()->cmp_id}}"
+        };
+        var isDuplicate = false;
+        for (let el of dataTagihan) {
+            if (el.m_coas_id === $('.tagihan').val()) {
+                isDuplicate = true
+                break;
+            }
+        }
+        if (!isDuplicate) {
+            $('.nominal').val("");
+            $(".tagihan").val('').trigger('change')
+
+            dataTagihan.push(obj);
+            console.log(dataTagihan);
+            rebuildTagihan();
+            $('#modal').modal('hide');
+        } else {
+            swal2("error", "Tagihan Sudah Di pilih.");
         }
 
-        function rebuildTagihan2() {
-            var datas = <?php echo $dataDetail ?>;
-            datas.forEach((m, i) => {
-                dataTagihan.push(m);
-            });
-            rebuildTagihan();
-        };
-        rebuildTagihan2();
-        $('.saveBtn').click((e) => {
-            e.preventDefault();
-            if ($('.tagihan').val() == "") {
-                return;
-            }
-            if ($('.nominal').val() == "") {
-                return;
-            }
-            var obj = {
-                "name": $('.tagihan :selected').text(),
-                "m_coas_id": $('.tagihan').val(),
-                "desc": $('.desc').val(),
-                "nominal": $('.nominal').val(),
-                "cmp_id": "{{Auth::user()->cmp_id}}"
-            };
-            var isDuplicate = false;
-            for (let el of dataTagihan) {
-                if (el.m_coas_id === $('.tagihan').val()) {
-                    isDuplicate = true
-                    break;
-                }
-            }
-            if (!isDuplicate) {
-                $('.nominal').val("");
-                $(".tagihan").val('').trigger('change')
-
-                dataTagihan.push(obj);
-                console.log(dataTagihan);
-                rebuildTagihan();
-                $('#modal').modal('hide');
-            } else {
-                swal2("error", "Tagihan Sudah Di pilih.");
-            }
-
-
-        });
-
-
-        $(document).on('click', '.remove', function(e) {
-            e.preventDefault();
-            var id = $(this).attr('data-row');
-            console.log(id);
-            dataTagihan = dataTagihan.filter(function(d, i) {
-                console.log(i + " " + id);
-                return id !== d.m_coas_id
-            })
-            console.log(dataTagihan)
-            rebuildTagihan();
-
-
-        });
-
-        $('#simpan').click(function(e) {
-            e.preventDefault()
-            var datas = $('#myForm').serializeArray();
-            datas.push({
-                name: 'detail',
-                value: JSON.stringify(dataTagihan)
-            });
-            console.log(datas);
-            $.ajax({
-                url: "{{route('tagihan.update',$mPackages->id)}}",
-                method: "PATCH",
-                data: datas,
-                dataType: "json",
-                success: function(data) {
-                    swal2('success', "Berhasil Di simpan");
-                    window.location = "{{route('tagihan.index')}}";
-                },
-                error: function(xhr, status, error) {
-                    var err = JSON.parse(xhr.responseText);
-                    swal2('error', err.Message);
-                }
-            });
-        });
 
     });
+
+
+    $(document).on('click', '.remove', function(e) {
+        e.preventDefault();
+        var id = $(this).attr('data-row');
+        console.log(id);
+        dataTagihan = dataTagihan.filter(function(d, i) {
+            console.log(i + " " + id);
+            return id !== d.m_coas_id
+        })
+        console.log(dataTagihan)
+        rebuildTagihan();
+
+
+    });
+
+    $('#simpan').click(function(e) {
+        e.preventDefault()
+        var datas = $('#myForm').serializeArray();
+        datas.push({
+            name: 'detail',
+            value: JSON.stringify(dataTagihan)
+        });
+        console.log(datas);
+        $.ajax({
+            url: "{{route('tagihan.update',$mPackages->id)}}",
+            method: "PATCH",
+            data: datas,
+            dataType: "json",
+            success: function(data) {
+                swal2('success', "Berhasil Di simpan");
+                window.location = "{{route('tagihan.index')}}";
+            },
+            error: function(xhr, status, error) {
+                var err = JSON.parse(xhr.responseText);
+                swal2('error', err.Message);
+            }
+        });
+    });
+
+});
 </script>
 @stop
