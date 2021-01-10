@@ -48,4 +48,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Models\Cmp', 'cmp_id');
     }
+    public function house()
+    {
+        return $this->hasMany('App\Models\HomeUser', 'user_id');
+    }
 }

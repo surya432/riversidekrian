@@ -51,6 +51,7 @@ Route::prefix('/dt')->middleware('auth')->group(function () {
     Route::get('/cmp', '\App\Http\Controllers\CmpController@json')->name('dtcmp');
     Route::get('/apiCoa', '\App\Http\Controllers\MCoaController@apiCoa')->name('dtcoa');
     Route::get('/tagihan', '\App\Http\Controllers\MPackagesController@json')->name('tagihandt');
+    Route::get('/list-warga', '\App\Http\Controllers\MPackagesController@dtwarga')->name('dtwarga');
     Route::get('/payment', '\App\Http\Controllers\PaymentController@json')->name('dtpayment');
     Route::get('/getParent/{id}', '\App\Http\Controllers\MCoaController@getParent')->name('dtgetParent');
 });

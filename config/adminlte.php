@@ -318,19 +318,19 @@ return [
                     'route'  => 'minteface.index',
                     // 'icon' => 'fas fa-fw fa-users',
                 ],
-                [
-                    'text' => 'Laporan',
-                    'icon' => 'fas fa-fw fa-chart-line',
-                    'can'   => ['isRT', 'isBendahara'],
-                    'submenu' => [
+            ]
+        ],
+        [
+            'text' => 'Laporan',
+            'icon' => 'fas fa-fw fa-chart-line',
+            'can'   => ['isRT', 'isBendahara'],
+            'submenu' => [
 
-                        [
-                            'text' => 'Master Coa',
-                            'route'  => 'coa.index',
-                            // 'icon' => 'fas fa-fw fa-users',
-                            'can'   => ['isBendahara', 'isRT',],
-                        ],
-                    ]
+                [
+                    'text' => 'Master Coa',
+                    'route'  => 'coa.index',
+                    // 'icon' => 'fas fa-fw fa-users',
+                    'can'   => ['isBendahara', 'isRT',],
                 ],
             ]
         ],

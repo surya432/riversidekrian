@@ -27,7 +27,7 @@
                                 </div>
 
                                 <div class="form-group col-6">
-                                    <label for="">Tanggal Kegiatan <span class="required">*</span> </label>
+                                    <label for="">Tanggal <span class="required">*</span> </label>
                                     <input type="date" class="form-control input-sm" name="date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
                                     <!-- /.input group -->
                                 </div>
@@ -46,13 +46,13 @@
 
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="text-left"> <button data-toggle="modal" data-target="#modal" class='btn btn-sm btn-primary btn-flat btn-add-tagihan '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Keperluan</button>
+                                    <div class="text-left"> <button data-toggle="modal" data-target="#modal" class='btn btn-sm btn-primary btn-flat btn-add-tagihan '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Tambah Tipe Pengeluaran</button>
                                     </div>
                                     <table class="table table-striped table-bordered dataTable">
                                         <thead>
                                             <tr>
                                                 <th style="width:6%!important">No</th>
-                                                <th style="width:36%!important">Nama Barang</th>
+                                                <th style="width:36%!important">Tipe Pengeluaran</th>
                                                 <th style="width:36%!important">Keterangan</th>
                                                 <th style="width:16%!important">Nominal</th>
                                                 <th style=" width:6%!important">Action</th>
@@ -84,16 +84,16 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Keperluan</h5>
+                <h5 class="modal-title">Tambah Tipe Pengeluaran</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Jenis Keperluan<span class="required">*</span></label>
+                    <label>Tipe Pengeluaran<span class="required">*</span></label>
                     <select class="form-control select2 tagihan" name='keperluan' style="width: 100%;">
-                        <option value="">== Pilih Keperluan ==</option>
+                        <option value="">== Pilih Tipe Pengeluaran ==</option>
                         @foreach ($akun as $id => $name)
                         <option value="{{ $name->code }}">{{ $name->desc }}</option>
                         @endforeach
@@ -110,7 +110,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" id="saveBtn" value="create" class="btn btn-primary saveBtn">Tambahkan Tagihan</button>
+                <button type="submit" id="saveBtn" value="create" class="btn btn-primary saveBtn">Tambahkan Pengeluaran</button>
             </div>
         </div>
     </div>

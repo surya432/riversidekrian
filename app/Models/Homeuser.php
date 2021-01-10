@@ -9,4 +9,8 @@ class Homeuser extends Model
 {
     use HasFactory;
     use \Illuminate\Database\Eloquent\SoftDeletes;
+    public function homes()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id');
+    }
 }

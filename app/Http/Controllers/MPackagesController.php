@@ -7,6 +7,7 @@ use App\Models\MDPackages;
 use App\Models\MInterface;
 use App\Models\MPackages;
 use App\Models\MUserPackages;
+use App\Models\Rumah;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,24 @@ use Illuminate\Support\Facades\DB;
 
 class MPackagesController extends Controller
 {
+    public function dtwarga(Request $request)
+    {
+        $dataWarga = Rumah::with(['typerumah', 'tenants.homes'])->where('cmp_id', Auth::user()->cmp_id)->get();
+        return \Yajra\Datatables\Datatables::of($dataWarga)
+            ->addColumn('tipe_rumah', function ($q) {
+                //Kemudian kita menambahkan kolom baru , yaitu "action"
+                return $q->typerumah->name;
+            })
+            ->addColumn('tenant', function ($q) {
+                //Kemudian kita menambahkan kolom baru , yaitu "action"
+                return $q->tenants[0]->homes->name;
+            })
+            // ->addColumn('action', function ($q) {
+            //     //Kemudian kita menambahkan kolom baru , yaitu "action"
+            //     return '<input type="checkbox" name="tagihan" value="' . $q->id . '">';
+            // })
+            ->addIndexColumn()->make(true);
+    }
     public function json(Request $request)
     {
         $data = \App\Models\MPackages::where("m_packages.cmp_id", Auth::user()->cmp_id)->orderBy('id', 'desc')->get();

@@ -3,7 +3,9 @@
 @section('title', 'Buat Tagihan baru')
 
 @section('content_header')
-<h1 class="m-0 text-dark"></h1>
+<h1 class="m-0 text-dark">
+    <h3 class="box-title">Buat Tagihan Baru</h3>
+</h1>
 @stop
 
 @section('content')
@@ -16,27 +18,11 @@
                 <div class="col-md-12">
                     <div class="box box-info">
                         {!! Form::open(['route' => 'cmp.store','class'=>'form-horizontal','id'=>"myForm",'autocomplete'=>"off"]) !!}
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Buat Tagihan Baru</h3>
-                        </div>
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-6 ">
                                     <label for="">Nama Tagihan<span class="required">*</span> </label>
                                     {{ Form::text('name', null, array_merge(['class' => 'form-control','require'=>true])) }}
-                                </div>
-                                <div class="form-group col-6 ">
-                                    <label for="">Tipe Tagihan <span class="required">*</span> </label>
-                                    <div class="form-control">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input cbSekali" type="radio" id="tipe" name="tipe" value="Sekali">
-                                            <label class="form-check-label" for="tipe" name="tipe">Sekali</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input cbBulanan" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan">
-                                            <label class="form-check-label" for="inlineCheckbox2" name="tipe">Tiap Bulan</label>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="form-group col-6 ">
                                     <label for="">Status Tagihan <span class="required">*</span> </label>
@@ -48,6 +34,19 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input cbTidakAktif" type="radio" id="statusTidakAktif" name="status" value="tidak aktif">
                                             <label class="form-check-label" for="statusTidakAktif" name="status">Tidak Aktif</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-6 ">
+                                    <label for="">Tipe Tagihan <span class="required">*</span> </label>
+                                    <div class="form-control">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input cbSekali" type="radio" id="tipe" name="tipe" value="Sekali">
+                                            <label class="form-check-label" for="tipe" name="tipe">Sekali</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input cbBulanan" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan">
+                                            <label class="form-check-label" for="inlineCheckbox2" name="tipe">Tiap Bulan</label>
                                         </div>
                                     </div>
                                 </div>
@@ -66,7 +65,7 @@
                                     <input type="text" class="form-control input-sm totalTagihan" name="totalTagihan" value="" readonly>
                                     <!-- /.input group -->
                                 </div>
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <div class="text-right" style="display: none;"> <button class='btn btn-sm btn-primary btn-flat '><i class="fas fa-fw  fa-plus" aria-hidden="true"></i> Pelangan</button>
                                     </div>
                                     <div class="form-group">
@@ -78,7 +77,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-12 ">
@@ -106,7 +105,7 @@
                                                                 <th>Nama</th>
                                                                 <th>Keterangan</th>
                                                                 <th>Nominal</th>
-                                                                <th style="width:6%!important">Action</th>
+                                                                <th style="width:6%!important">Aksi</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id='tbody'>
@@ -114,7 +113,18 @@
                                                     </table>
                                                 </div>
                                                 <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
-                                                    Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam.
+                                                    <table style="width:100%!important" id="table223" class="table  table-striped table-bordered dataTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:2%!important">No</th>
+                                                                <th>Nama</th>
+                                                                <th style="width:25%!important">Status Warga</th>
+                                                                <th style="width:2%!important">Aksi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id='tbody'>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
 
                                             </div>
@@ -179,8 +189,56 @@
 </div>
 @stop
 @section('js')
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        //check data warga 
+
+        table2 =
+            $('#table223').DataTable({
+                //server-side
+                // processing: true,
+                // "searching": false,
+                // serverSide: true,
+                ajax: {
+                    'url': "{!! route('dtwarga') !!}",
+                    "type": "GET"
+                },
+                'columnDefs': [{
+                    'targets': 3,
+                    // 'checkboxes': {
+                    //     'selectRow': true
+                    // },
+                    "data": "download_link",
+                    "render": function(data, type, row, meta) {
+                        return '<input type="checkbox" id="dt-checkboxes" class="dt-checkboxes" name="dt-checkboxes" value="' + data + '">';
+                    }
+                }],
+
+                // 'select': {
+                //     'style': 'multi'
+                // },
+                'order': [
+                    [1, 'asc']
+                ],
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'tenant',
+                        name: 'tenant'
+                    },
+                    {
+                        data: 'tipe_rumah',
+                        name: 'tipe_rumah'
+                    },
+
+                ]
+            });
         $('.select2').select2();
         $('#datepicker').datepicker({
             autoclose: true,
@@ -283,29 +341,37 @@
 
 
         });
-
         $('#simpan').click(function(e) {
             e.preventDefault()
+            var wargaSelected = [];
+
             var datas = $('#myForm').serializeArray();
+            $("input:checkbox[class=dt-checkboxes]:checked").each(function() {
+                wargaSelected.push($(this).val());
+            });
             datas.push({
                 name: 'detail',
-                value: JSON.stringify(dataTagihan)
+                value: dataTagihan
+            });
+            datas.push({
+                name: 'warga',
+                value: wargaSelected
             });
             console.log(datas);
-            $.ajax({
-                url: "{{route('tagihan.store')}}",
-                method: "POST",
-                data: datas,
-                dataType: "json",
-                success: function(data) {
-                    swal2('success', "Berhasil Di simpan");
-                    // window.location = "{{route('tagihan.index')}}";
-                },
-                error: function(xhr, status, error) {
-                    var err = JSON.parse(xhr.responseText);
-                    swal2('error', err.Message);
-                }
-            });
+            // $.ajax({
+            //     url: "{{route('tagihan.store')}}",
+            //     method: "POST",
+            //     data: datas,
+            //     dataType: "json",
+            //     success: function(data) {
+            //         swal2('success', "Berhasil Di simpan");
+            //         // window.location = "{{route('tagihan.index')}}";
+            //     },
+            //     error: function(xhr, status, error) {
+            //         var err = JSON.parse(xhr.responseText);
+            //         swal2('error', err.Message);
+            //     }
+            // });
         });
 
     });
