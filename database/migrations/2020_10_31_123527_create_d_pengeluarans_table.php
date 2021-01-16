@@ -16,8 +16,10 @@ class CreateDPengeluaransTable extends Migration
         Schema::create('d_pengeluarans', function (Blueprint $table) {
             $table->id();
             $table->string('pengeluaran_id');
-            $table->string('item');
+            $table->string('desc');
+            $table->string('m_coas_id');
             $table->integer('nominal');
+            $table->integer('cmp_id');
             $table->timestamps();
             $table->softDeletes();
         });

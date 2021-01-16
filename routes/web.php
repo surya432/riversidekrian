@@ -48,6 +48,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
 });
 
 Route::prefix('/dt')->middleware('auth')->group(function () {
+    Route::get('/pengeluarandt', '\App\Http\Controllers\PengeluaranController@json')->name('pengeluarandt');
     Route::get('/cmp', '\App\Http\Controllers\CmpController@json')->name('dtcmp');
     Route::get('/apiCoa', '\App\Http\Controllers\MCoaController@apiCoa')->name('dtcoa');
     Route::get('/tagihan', '\App\Http\Controllers\MPackagesController@json')->name('tagihandt');

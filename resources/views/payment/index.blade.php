@@ -22,9 +22,9 @@
                                     <th width="5%">No</th>
                                     <th width="15%">No Tagihan</th>
                                     <th width="35%">Nama</th>
+                                    <th width="10%">Status</th>
                                     <th width="15%">Total</th>
-                                    <th witdh="20%">Status</th>
-                                    {{-- <th>Status</th> --}}
+                                    <th witdh="10%">Status</th>
                                     <th witdh="10%" class="nosort">Aksi</th>
                                 </tr>
                             </thead>
@@ -45,8 +45,7 @@
             table =
                 $('#table2').DataTable({
                     //server-side
-                    processing: true,
-                    serverSide: true,
+
                     ajax: {
                         'url': "{!! route('dtpayment') !!}",
                         "type": "GET"
@@ -65,6 +64,9 @@
                             name: 'name'
                         },
                         {
+                            data: 'note',
+                            name: 'note'
+                        }, {
                             data: 'totalTagihanRp',
                             name: 'totalTagihanRp'
                         },

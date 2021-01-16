@@ -34,7 +34,7 @@
 
                                 <div class="form-group col-6">
                                     <label for="">Total Pengeluaran</label>
-                                    <input type="text" class="form-control input-sm totalTagihan" name="totalTagihan" value="" readonly>
+                                    <input type="text" class="form-control input-sm totalTagihan" name="total" value="" readonly>
                                     <!-- /.input group -->
                                 </div>
                                 <div class="form-group col-6" style="height: 150px;">
@@ -52,7 +52,7 @@
                                         <thead>
                                             <tr>
                                                 <th style="width:6%!important">No</th>
-                                                <th style="width:36%!important">Tipe Pengeluaran</th>
+                                                <!-- <th style="width:36%!important">Tipe Pengeluaran</th> -->
                                                 <th style="width:36%!important">Keterangan</th>
                                                 <th style="width:16%!important">Nominal</th>
                                                 <th style=" width:6%!important">Action</th>
@@ -153,10 +153,10 @@
                 count = i + 1;
                 html_code += "<tr id='" + dataTagihan[i].m_coas_id + "'>";
                 html_code += "<td>" + count + "</td>";
-                html_code += "<td>" + dataTagihan[i].name + "</td>";
+                // html_code += "<td>" + dataTagihan[i].name + "</td>";
                 html_code += "<td>" + dataTagihan[i].desc + "</td>";
                 html_code += "<td>" + new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
+                    // style: 'currency',
                     currency: 'IDR',
                 }).format(dataTagihan[i].nominal) + "</td>";
                 html_code += "<td><button type='button' name='remove' data-row='" + dataTagihan[i].m_coas_id + "' class='btn btn-sm btn-danger btn-flat remove'><i class='fas fa-fw fa-trash' aria-hidden='true'></i></button></td>";
@@ -165,7 +165,7 @@
             });
             $('#tbody').html(html_code);
             $('.totalTagihan').val(new Intl.NumberFormat('id-ID', {
-                style: 'currency',
+                // style: 'currency',
                 currency: 'IDR',
             }).format(totalTagihan));
 
@@ -231,13 +231,13 @@
             });
             console.log(datas);
             $.ajax({
-                url: "{{route('tagihan.store')}}",
+                url: "{{route('pengeluaran.store')}}",
                 method: "POST",
                 data: datas,
                 dataType: "json",
                 success: function(data) {
                     swal2('success', "Berhasil Di simpan");
-                    window.location = "{{route('tagihan.index')}}";
+                    window.location = "{{route('pengeluaran.index')}}";
                 },
                 error: function(xhr, status, error) {
                     var err = JSON.parse(xhr.responseText);

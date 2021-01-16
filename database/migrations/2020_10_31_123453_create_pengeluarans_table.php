@@ -16,6 +16,7 @@ class CreatePengeluaransTable extends Migration
         Schema::create('pengeluarans', function (Blueprint $table) {
             $table->id();
             $table->string('no');
+            $table->string('name');
             $table->enum('status', ['open', 'in-approval', 'approved', 'post', 'closed'])->default('open');
             $table->date('date')->nullable();
             $table->string('total');

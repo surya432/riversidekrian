@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class DPengeluaran extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
+    protected $hidden = [
+        'deleted_at',
+    ];
 }

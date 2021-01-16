@@ -31,11 +31,11 @@
                                     <label for="">Status Tagihan <span class="required">*</span> </label>
                                     <div class="form-control">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="status" name="status" value="1" <?php if ($mPackages->status == "aktif") echo "checked"; ?>>
+                                            <input class="form-check-input" type="radio" id="status" name="status" value="aktif" <?php if ($mPackages->status == "aktif") echo "checked"; ?>>
                                             <label class="form-check-label" for="status" name="status">Aktif</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="inlineCheckbox2status" name="status" value="0" <?php if ($mPackages->status == "tidak aktif") echo "checked"; ?>>
+                                            <input class="form-check-input" type="radio" id="inlineCheckbox2status" name="status" value="tidak aktif" <?php if ($mPackages->status == "tidak aktif") echo "checked"; ?>>
                                             <label class="form-check-label" for="inlineCheckbox2status" name="status">Tidak Aktif</label>
                                         </div>
                                     </div>

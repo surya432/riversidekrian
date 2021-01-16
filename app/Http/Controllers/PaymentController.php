@@ -14,22 +14,20 @@ class PaymentController extends Controller
 
     public function json(Request $request)
     {
-        $usersPayments = \App\Models\MUserPackages::join('users', 'm_user_packages.user_id', 'users.id')->where("m_user_packages.cmp_id", Auth::user()->cmp_id)->orderBy('m_user_packages.status', 'asc')->orderBy('m_user_packages.id', 'desc')->select('m_user_packages.*', 'users.name')->get();
+        $usersPayments = \App\Models\MUserPackages::join('users', 'm_user_packages.user_id', 'users.id')->whereDate('date', '<=', \Carbon\Carbon::now())->where('m_user_packages.status', 'open')->where("m_user_packages.cmp_id", Auth::user()->cmp_id)->orderBy('m_user_packages.status', 'asc')->orderBy('m_user_packages.id', 'desc')->select('m_user_packages.*', 'users.name')->get();
         return \Yajra\Datatables\Datatables::of($usersPayments)
             //$query di masukkan kedalam Datatables
             ->addColumn('totalTagihanRp', function ($q) {
                 return
-                    "Rp " . number_format((int)trim($q->totalTagihan), 2, ',', '.');
+                    "Rp " . number_format((int) trim($q->totalTagihan), 2, ',', '.');
             })
             ->addColumn('status-tagihan', function ($q) {
-                if (\Carbon\Carbon::createFromFormat('Y-m-d', $q->date)->lte(\Carbon\Carbon::now()->format('Y-m-d'))) {
-                    return "Belum Dibayar";
-                } elseif ($q->status == 'paid') {
+                if ($q->status == 'paid') {
                     return "Sudah Dibayar";
                 } elseif ($q->status == 'post') {
                     return "Pembayaran Diterima";
                 } else {
-                    return "Open";
+                    return "Belum Dibayar";
                 }
             })
             ->addColumn('action', function ($q) {

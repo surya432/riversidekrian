@@ -26,8 +26,8 @@
                                 <tr>
                                     <th width="5%">No</th>
                                     <th width="45%">Name Kegiatan</th>
-                                    <th width="30%">Tanggal</th>
-                                    <th witdh="10%">Status</th>
+                                    <th width="25%">Biaya</th>
+                                    <th witdh="15%">Status</th>
                                     {{-- <th>Status</th> --}}
                                     <th witdh="10%" class="nosort">Aksi</th>
                                 </tr>
@@ -52,7 +52,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        'url': "{!! route('tagihandt') !!}",
+                        'url': "{!! route('pengeluarandt') !!}",
                         "type": "GET"
                     },
                     columns: [{
@@ -66,8 +66,8 @@
                             name: 'name'
                         },
                         {
-                            data: 'tipe',
-                            name: 'tipe'
+                            data: 'biaya',
+                            name: 'Biaya'
                         },
                         {
                             data: 'status',
