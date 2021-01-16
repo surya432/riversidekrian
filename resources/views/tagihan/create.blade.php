@@ -17,7 +17,7 @@
                 @include('displayerror')
                 <div class="col-md-12">
                     <div class="box box-info">
-                        {!! Form::open(['route' => 'cmp.store','class'=>'form-horizontal','id'=>"myForm",'autocomplete'=>"off"]) !!}
+                        {!! Form::open(['class'=>'form-horizontal','id'=>"myForm",'autocomplete'=>"off"]) !!}
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-6 ">
@@ -28,7 +28,7 @@
                                     <label for="">Status Tagihan <span class="required">*</span> </label>
                                     <div class="form-control">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input cbAktif" type="radio" id="statusAktif" name="status" value="aktif">
+                                            <input class="form-check-input cbAktif" type="radio" id="statusAktif" name="status" value="aktif" checked>
                                             <label class="form-check-label" for="statusAktif" name="status">Aktif</label>
                                         </div>
                                         <div class="form-check form-check-inline">
@@ -41,11 +41,11 @@
                                     <label for="">Tipe Tagihan <span class="required">*</span> </label>
                                     <div class="form-control">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input cbSekali" type="radio" id="tipe" name="tipe" value="Sekali">
+                                            <input class="form-check-input cbSekali" type="radio" id="tipe" name="tipe" value="sekali" checked>
                                             <label class="form-check-label" for="tipe" name="tipe">Sekali</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input cbBulanan" type="radio" id="inlineCheckbox2" name="tipe" value="Bulanan">
+                                            <input class="form-check-input cbBulanan" type="radio" id="inlineCheckbox2" name="tipe" value="bulanan">
                                             <label class="form-check-label" for="inlineCheckbox2" name="tipe">Tiap Bulan</label>
                                         </div>
                                     </div>
@@ -103,7 +103,7 @@
                                                             <tr>
                                                                 <th style="width:6%!important">No</th>
                                                                 <th>Nama</th>
-                                                                <th>Keterangan</th>
+                                                                <!-- <th>Keterangan</th> -->
                                                                 <th>Nominal</th>
                                                                 <th style="width:6%!important">Aksi</th>
                                                             </tr>
@@ -132,10 +132,6 @@
                                         <!-- /.card -->
                                     </div>
                                 </div>
-                                <div class="col-12">
-
-                                </div>
-
                             </div>
                             <hr />
                         </div>
@@ -174,10 +170,10 @@
                     <label>Nominal Tagihan <span class="required">*</span></label>
                     <input type="text" class="form-control input-sm nominal" name="nominal" placeholder="Nominal Tagihan..." maxlength="30" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="acc-code" required>
                 </div>
-                <div class="form-group desc-form" id="formdesc">
+                <!-- <div class="form-group desc-form" id="formdesc">
                     <label>Keterangan </label>
                     <textarea name="desc" class="form-control desc"></textarea>
-                </div>
+                </div> -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -194,7 +190,6 @@
 <script type="text/javascript">
     $(document).ready(function() {
         //check data warga 
-
         table2 =
             $('#table223').DataTable({
                 //server-side
@@ -210,9 +205,9 @@
                     // 'checkboxes': {
                     //     'selectRow': true
                     // },
-                    "data": "download_link",
+                    "data": "id",
                     "render": function(data, type, row, meta) {
-                        return '<input type="checkbox" id="dt-checkboxes" class="dt-checkboxes" name="dt-checkboxes" value="' + data + '">';
+                        return '<input type="checkbox" id="dt-checkboxes' + row.id + '" class="dt-checkboxes' + row.id + '" name="warga[]" value="' + row.id + '" >';
                     }
                 }],
 
@@ -273,7 +268,7 @@
                 html_code += "<tr id='" + dataTagihan[i].m_coas_id + "'>";
                 html_code += "<td>" + count + "</td>";
                 html_code += "<td>" + dataTagihan[i].name + "</td>";
-                html_code += "<td>" + dataTagihan[i].desc + "</td>";
+                // html_code += "<td>" + dataTagihan[i].desc + "</td>";
                 html_code += "<td>" + new Intl.NumberFormat('id-ID', {
                     style: 'currency',
                     currency: 'IDR',
@@ -317,7 +312,6 @@
                 $('.desc').val("");
 
                 dataTagihan.push(obj);
-                console.log(dataTagihan);
                 rebuildTagihan();
                 $('#modal').modal('hide');
             } else {
@@ -345,33 +339,34 @@
             e.preventDefault()
             var wargaSelected = [];
 
-            var datas = $('#myForm').serializeArray();
             $("input:checkbox[class=dt-checkboxes]:checked").each(function() {
                 wargaSelected.push($(this).val());
             });
+            var datas = $('#myForm').serializeArray();
+
             datas.push({
                 name: 'detail',
-                value: dataTagihan
+                value: JSON.stringify(dataTagihan)
             });
-            datas.push({
-                name: 'warga',
-                value: wargaSelected
-            });
-            console.log(datas);
-            // $.ajax({
-            //     url: "{{route('tagihan.store')}}",
-            //     method: "POST",
-            //     data: datas,
-            //     dataType: "json",
-            //     success: function(data) {
-            //         swal2('success', "Berhasil Di simpan");
-            //         // window.location = "{{route('tagihan.index')}}";
-            //     },
-            //     error: function(xhr, status, error) {
-            //         var err = JSON.parse(xhr.responseText);
-            //         swal2('error', err.Message);
-            //     }
+            // datas.push({
+            //     name: 'warga',
+            //     value: wargaSelected
             // });
+            $.ajax({
+                url: "{{route('tagihan.store')}}",
+                method: "POST",
+                data: datas,
+                dataType: "json",
+                success: function(data) {
+                    swal2('success', "Berhasil Di simpan");
+                    window.location = "{{route('tagihan.index')}}";
+                },
+                error: function(xhr, status, error) {
+                    var err = JSON.parse(xhr.responseText);
+                    console.log(err)
+                    swal2('error', err.message);
+                }
+            });
         });
 
     });

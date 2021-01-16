@@ -21,7 +21,7 @@ class CmpController extends Controller
             $q
                 ->join('rumahs', 'rumahs.id', '=', 'homeusers.rumah_id')
                 ->select('rumahs.*');
-        }])->where('id',Auth::user()->id)->first();
+        }])->where('id', Auth::user()->id)->first();
         return view('cmp.show', compact('data'));
     }
     public function json(Request $request)
@@ -76,7 +76,7 @@ class CmpController extends Controller
     public function store(Request $request)
     {
         //
-        dd($request->all());
+        // dd($request->all());
     }
 
     /**
@@ -85,7 +85,7 @@ class CmpController extends Controller
      * @param  \App\Models\Cmp  $cmp
      * @return \Illuminate\Http\Response
      */
-   
+
     public function show(Cmp $cmp)
     {
         $data = $cmp::with(['provinsi', 'kabupaten', 'kecamatan', 'kelurahan', 'warga', 'rumah' => function ($q) {

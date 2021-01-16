@@ -11,27 +11,22 @@ use App\Models\Rumah;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class MPackagesController extends Controller
 {
     public function dtwarga(Request $request)
     {
         $dataWarga = Rumah::with(['typerumah', 'tenants.homes'])->where('cmp_id', Auth::user()->cmp_id)->get();
+
         return \Yajra\Datatables\Datatables::of($dataWarga)
             ->addColumn('tipe_rumah', function ($q) {
-                //Kemudian kita menambahkan kolom baru , yaitu "action"
                 return $q->typerumah->name;
             })
             ->addColumn('tenant', function ($q) {
-                //Kemudian kita menambahkan kolom baru , yaitu "action"
                 return $q->tenants[0]->homes->name;
             })
-            // ->addColumn('action', function ($q) {
-            //     //Kemudian kita menambahkan kolom baru , yaitu "action"
-            //     return '<input type="checkbox" name="tagihan" value="' . $q->id . '">';
-            // })
-            ->addIndexColumn()->make(true);
+            ->addIndexColumn()
+            ->make(true);
     }
     public function json(Request $request)
     {
@@ -103,17 +98,16 @@ class MPackagesController extends Controller
             "totalTagihan" =>  preg_replace('/\D/', '', $nom),
             "next_run" =>  $request->only('tipe') != "Sekali" ? \Carbon\Carbon::now()->addMonth() : null,
         ]);
-
+        // dd($request->warga);
+        \DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $tagihan =  MPackages::create($request->only('name', 'tipe', 'date', 'duedate', 'status', 'create_by', 'next_run', 'cmp_id'));
             $detail = $request->only('detail');
             $d_Detail = json_decode($detail['detail'], true);
             foreach ($d_Detail as $a => $b) {
-                $mPackagesId = array();
                 $b["m_packages_id"] = $tagihan->id;
                 // MDPackages::create($b);
-                DB::table('m_d_packages')->insert($b);
+                \DB::table('m_d_packages')->insert($b);
             }
             $request->merge([
                 'cmp_id' => Auth::user()->cmp_id,
@@ -136,11 +130,14 @@ class MPackagesController extends Controller
             // }
             //  else {
             // }
-            DB::commit();
+            \DB::commit();
             return response()->json(array('status' => true, "message" => "Tagihan berhasil Di buat"), 200);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return response()->json(array('status' => false, "message" => "Tagihan Gagal Di buat", "error" => $th->getMessage()), 500);
+        } catch (\Throwable $e) {
+            \DB::rollback();
+            return response()->json(array('status' => false, "message" => "Tagihan Gagal Di buat", "error" => $e->getMessage()), 500);
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return response()->json(array('status' => false, "message" => "Tagihan Gagal Di buat", "error" => $e->getMessage()), 500);
         }
     }
 
@@ -195,7 +192,7 @@ class MPackagesController extends Controller
      */
     public function update(Request $request, MPackages $mPackages, $id)
     {
-        // dd($request->all());
+        dd($request->all());
         $nom = str_replace(",00", "", $request->totalTagihan);
         $request->merge([
             'cmp_id' => Auth::user()->cmp_id,
@@ -203,43 +200,17 @@ class MPackagesController extends Controller
             "totalTagihan" =>  preg_replace('/\D/', '', $nom),
         ]);
 
+        \DB::beginTransaction();
         try {
-            DB::beginTransaction();
-            $tagihan =  MPackages::where(['id' => $id, 'cmp_id' => Auth::user()->cmp_id])->update($request->only('name', 'tipe', 'date', 'duedate',  'update_by'));
-            $dataDetail = $request->only('detail');
-            $dataDelete2 =  MDPackages::where('m_packages_id', $id)->where('cmp_id', Auth::user()->cmp_id)->get();
-            $dataDelete2->each->delete();
-            foreach (json_decode($dataDetail['detail'], true) as $a => $b) {
-                $b["m_packages_id"] = $id;
-                MDPackages::create($b);
-            }
 
-            $request->merge([
-                'cmp_id' => Auth::user()->cmp_id,
-                "create_by" => Auth::user()->name,
-                "m_packages_id" => $id,
-            ]);
-            // if ($request->tipe == "Sekali") {
-            //     $noInvoice = MUserPackages::where('cmp_id', Auth::user()->cmp_id)->whereMonth('created_at', '=', \Carbon\Carbon::now()->format('m'))->get();
-            //     $no = \Carbon\Carbon::now()->format('Ymd') . str_pad($noInvoice->count(), 3, "0", STR_PAD_LEFT);
-            //     foreach ($request->warga as $a => $b) {
-            //         $request->merge([
-            //             "no" => $no,
-            //             "user_id" => $b
-            //         ]);
-            //         MUserPackages::where("m_packages_id", $id)->where('cmp_id', $request->cmp_id)->update($request->only('status',  'user_id', 'totalTagihan'));
-            //     }
-            // } else {
-            $request->merge([
-                "user_id" => $request->warga
-            ]);
-            // Billed::where('m_packages_id', $request->m_packages_id)->update($request->only('status',  'user_id', 'totalTagihan'));
-            // }
-            DB::commit();
+            \DB::commit();
             return response()->json(array('status' => true, "message" => "Tagihan berhasil Di Ubah"), 200);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return response()->json(array('status' => false, "message" => "Tagihan Gagal Di Ubah", "error" => $th->getMessage()), 500);
+        } catch (\Throwable $e) {
+            \DB::rollback();
+            return response()->json(array('status' => false, "message" => "Tagihan Gagal Di buat", "error" => $e->getMessage()), 500);
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return response()->json(array('status' => false, "message" => "Tagihan Gagal Di buat", "error" => $e->getMessage()), 500);
         }
     }
 
